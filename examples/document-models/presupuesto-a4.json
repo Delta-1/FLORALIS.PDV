@@ -1,0 +1,25 @@
+{
+  "model": "budget",
+  "config": {
+    "title": "Presupuesto / cotización",
+    "format": "a4",
+    "style": "modern",
+    "accent": "#652276",
+    "fontSize": "medium",
+    "showLogo": true,
+    "showBusiness": true,
+    "showPeriod": true,
+    "showSignature": true,
+    "footer": "Presupuesto válido por 7 días. Documento no fiscal.",
+    "fields": [
+      "number",
+      "date",
+      "client",
+      "seller",
+      "items",
+      "subtotal",
+      "discount",
+      "total"
+    ]
+  }
+}

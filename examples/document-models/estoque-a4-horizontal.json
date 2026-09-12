@@ -1,0 +1,25 @@
+{
+  "model": "stock-position",
+  "config": {
+    "title": "Posición actual de stock",
+    "format": "landscape",
+    "style": "minimal",
+    "accent": "#652276",
+    "fontSize": "medium",
+    "showLogo": true,
+    "showBusiness": true,
+    "showPeriod": true,
+    "showSignature": true,
+    "footer": "Inventario de referencia sujeto a movimientos posteriores a la emisión.",
+    "fields": [
+      "code",
+      "name",
+      "category",
+      "unit",
+      "stock",
+      "minimum",
+      "cost",
+      "price"
+    ]
+  }
+}

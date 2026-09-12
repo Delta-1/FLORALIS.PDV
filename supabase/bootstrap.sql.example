@@ -1,0 +1,28 @@
+-- Execute depois de criar o primeiro usuário no painel Authentication > Users.
+-- Substitua o UUID e revise os dados antes de executar.
+do $$
+declare
+  first_admin uuid := '00000000-0000-0000-0000-000000000000';
+  new_business uuid;
+begin
+  if not exists(select 1 from auth.users where id=first_admin) then
+    raise exception 'Substitua first_admin pelo UUID real do usuário';
+  end if;
+
+  insert into public.businesses(name,legal_name,tax_id,phone,city,currency)
+  values('FLORALIS','Floralis Flores e Presentes','','','','Bs')
+  returning id into new_business;
+
+  insert into public.memberships(business_id,user_id,role,display_name,email,job_title,supervisor)
+  select new_business,id,'admin',coalesce(raw_user_meta_data->>'name',email),email,'Administrador',true
+  from auth.users where id=first_admin;
+
+  insert into public.business_settings(business_id) values(new_business);
+
+  insert into public.products(business_id,code,name,category,unit,stock,min_stock,cost,price,wholesale_price)
+  values
+    (new_business,'BUQ-001','Buquê Romântico','Buquês','Unidade',12,3,90,180,165),
+    (new_business,'ROS-012','Ramalhete de Rosas','Flores','Unidade',18,4,110,220,200),
+    (new_business,'PRE-001','Caixa Presente Floral','Presentes','Unidade',8,2,75,155,140),
+    (new_business,'TEST-000000','Produto de teste','Tutorial','Unidade',100,0,0,100,100);
+end $$;

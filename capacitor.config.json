@@ -1,0 +1,12 @@
+{
+  "appId": "com.floralis.pdverp",
+  "appName": "FLORALIS PDV ERP",
+  "webDir": "dist-native",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#0b0c0f"
+  }
+}

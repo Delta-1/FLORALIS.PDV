@@ -1,0 +1,7 @@
+.DS_Store
+Thumbs.db
+.vercel
+node_modules
+android
+dist-native
+release

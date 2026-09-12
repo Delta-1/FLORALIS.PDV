@@ -1,0 +1,25 @@
+{
+  "model": "sale-receipt",
+  "config": {
+    "title": "Comprobante de venta",
+    "format": "thermal80",
+    "style": "compact",
+    "accent": "#652276",
+    "fontSize": "small",
+    "showLogo": true,
+    "showBusiness": true,
+    "showPeriod": true,
+    "showSignature": false,
+    "footer": "Gracias por su compra. Conserve este comprobante.",
+    "fields": [
+      "number",
+      "date",
+      "time",
+      "client",
+      "payment",
+      "items",
+      "discount",
+      "total"
+    ]
+  }
+}

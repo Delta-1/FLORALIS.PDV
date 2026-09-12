@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#652276" />
+    <meta name="description" content="Terminal de vendas FLORALIS para flores, buquês e presentes." />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="FLORALIS PDV" />
+    <title>FLORALIS — Terminal PDV</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/favicon.ico" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css?v=41" />
+  </head>
+  <body data-mode="standalone-pos">
+    <main class="standalone-workspace" id="app" tabindex="-1"></main>
+    <div class="app-layer" id="layer" hidden><div id="layerContent"></div></div>
+    <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+    <button class="pwa-install-button" id="pwaInstallButton" type="button" hidden aria-label="Instalar FLORALIS como aplicativo">
+      <img src="./assets/icon-192.png" alt="" /><span><small>USAR COMO APP</small><strong>Instalar FLORALIS</strong></span>
+    </button>
+    <input type="file" id="importInput" accept=".json,.csv" hidden />
+    <script>sessionStorage.removeItem('floralis.pos.unlocked');</script>
+    <script src="./pwa.js?v=17"></script>
+    <script src="./config.js?v=17"></script>
+    <script src="./backend.js?v=33"></script>
+    <script src="./document-studio.js?v=33"></script>
+    <script src="./app.js?v=44"></script>
+    <script src="./pdv-experience.js?v=28"></script>
+    <script src="./native-shell.js?v=1"></script>
+  </body>
+</html>

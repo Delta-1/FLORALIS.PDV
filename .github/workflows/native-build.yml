@@ -1,0 +1,56 @@
+name: Aplicativos Windows e Android
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows EXE
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run desktop:build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FLORALIS-Windows
+          path: release/*.exe
+          if-no-files-found: error
+
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci
+      - run: npm test
+      - run: npm run android:add
+      - run: npm run android:sync
+      - run: chmod +x android/gradlew
+      - run: cd android && ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FLORALIS-Android
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

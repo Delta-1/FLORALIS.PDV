@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#652276" />
+    <meta name="description" content="FLORALIS PDV & ERP — vendas de flores, buquês, presentes, estoque, caixa e relatórios." />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="FLORALIS" />
+    <title>FLORALIS — PDV & ERP</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/favicon.ico" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css?v=41" />
+  </head>
+  <body data-mode="admin">
+    <section class="nex-shell">
+      <aside class="nex-navbar" id="sidebar">
+          <button class="menu-toggle" id="menuToggle" aria-label="Expandir menú"><span data-icon="menu"></span><strong id="miniBrand"><img src="./assets/floralis-mark.png" alt="FLORALIS"></strong></button>
+        <nav class="nex-menu" aria-label="Navegación principal">
+          <button class="menu-item active" data-view="sales" title="Ventas"><span class="menu-icon" data-icon="cart"></span><span class="menu-label">Ventas</span></button>
+          <button class="menu-item" data-view="clients" title="Clientes"><span class="menu-icon" data-icon="users"></span><span class="menu-label">Clientes</span></button>
+          <button class="menu-item" data-view="products" title="Productos"><span class="menu-icon" data-icon="tag"></span><span class="menu-label">Productos</span></button>
+          <button class="menu-item" data-view="stock" title="Inventario"><span class="menu-icon" data-icon="box"></span><span class="menu-label">Inventario</span></button>
+          <button class="menu-item" data-view="catalog" title="Catálogo Online"><span class="menu-icon" data-icon="store"></span><span class="menu-label">Catálogo Online</span></button>
+          <button class="menu-item" data-view="cash" title="Caja"><span class="menu-icon" data-icon="wallet"></span><span class="menu-label">Caja</span></button>
+          <button class="menu-item" data-view="reports" title="Informes"><span class="menu-icon" data-icon="chart"></span><span class="menu-label">Informes</span></button>
+          <button class="menu-item" data-view="documents" title="Documentos y modelos"><span class="menu-icon" data-icon="receipt"></span><span class="menu-label">Documentos</span></button>
+          <button class="menu-item" data-view="employees" title="Funcionarios"><span class="menu-icon" data-icon="badge"></span><span class="menu-label">Funcionarios</span></button>
+          <button class="menu-item" data-view="devices" title="Dispositivos conectados"><span class="menu-icon" data-icon="monitor"></span><span class="menu-label">Dispositivos</span></button>
+          <button class="menu-item" data-view="logs" title="Logs e auditoría"><span class="menu-icon" data-icon="monitor"></span><span class="menu-label">Logs</span></button>
+          <button class="menu-item" data-view="tutorial" title="Tutorial"><span class="menu-icon" data-icon="help"></span><span class="menu-label">Tutorial</span></button>
+        </nav>
+        <div class="menu-bottom">
+          <button class="menu-item" data-view="settings" title="Configuración"><span class="menu-icon" data-icon="settings"></span><span class="menu-label">Configuración</span></button>
+          <button class="menu-item" data-action="open-help" title="Ayuda y soporte"><span class="menu-icon" data-icon="help"></span><span class="menu-label">Ayuda y soporte</span></button>
+        </div>
+      </aside>
+      <main class="nex-workspace" id="app" tabindex="-1"></main>
+    </section>
+
+    <div class="app-layer" id="layer" hidden><div id="layerContent"></div></div>
+    <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+    <button class="pwa-install-button" id="pwaInstallButton" type="button" hidden aria-label="Instalar FLORALIS como aplicativo">
+      <img src="./assets/icon-192.png" alt="" /><span><small>USAR COMO APP</small><strong>Instalar FLORALIS</strong></span>
+    </button>
+    <input type="file" id="importInput" accept=".json,.csv,.tsv,.xlsx,.xls" hidden />
+    <script src="./pwa.js?v=17"></script>
+    <script src="./config.js?v=17"></script>
+    <script src="./backend.js?v=33"></script>
+    <script src="./document-studio.js?v=33"></script>
+    <script src="./app.js?v=44"></script>
+    <script src="./import-wizard.js?v=18"></script>
+    <script src="./pdv-experience.js?v=28"></script>
+    <script src="./native-shell.js?v=1"></script>
+  </body>
+</html>
