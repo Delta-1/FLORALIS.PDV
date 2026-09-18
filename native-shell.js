@@ -14,7 +14,7 @@
   if (capacitor?.isNativePlatform?.() && printerPlugin?.printWebView) {
     globalThis.print = async () => {
       try {
-        await printerPlugin.printWebView({ name: document.title || 'FLORALIS PDV ERP' });
+        await printerPlugin.printWebView({ name: document.title || 'FLORALES PDV ERP' });
       } finally {
         globalThis.dispatchEvent(new Event('afterprint'));
       }

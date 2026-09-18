@@ -1,6 +1,6 @@
 {
   "appId": "com.floralis.pdverp",
-  "appName": "FLORALIS PDV ERP",
+  "appName": "FLORALES PDV ERP",
   "webDir": "dist-native",
   "server": {
     "androidScheme": "https"

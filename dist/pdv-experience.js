@@ -96,7 +96,7 @@
     html[data-scale="large"] .login-card h2{font-size:34px!important}
     html[data-scale="large"] .login-card label{font-size:14px!important}
 
-    /* Minimum: visual FLORALIS escuro, amplo e sem ornamentos desnecessários. */
+    /* Minimum: visual FLORALES escuro, amplo e sem ornamentos desnecessários. */
     html[data-shell="minimum"]{--surface:#292a2d;--surface-2:#202124;--panel:#2e2f32;--line:#4a4b50;--text:#f7f7f8;--muted:#b7b8bd;--accent:#652276;--accent-rgb:101,34,118;--accent-soft:rgba(101,34,118,.15);color-scheme:dark}
     html[data-shell="minimum"] body,html[data-shell="minimum"] #app{background:#202124;color:var(--text)}
     html[data-shell="minimum"] .nex-shell,html[data-shell="minimum"] .nex-workspace,html[data-shell="minimum"] .app-shell,html[data-shell="minimum"] .main,html[data-shell="minimum"] .page{background:#202124}
@@ -377,7 +377,7 @@
       if (selected) shellGrid.querySelectorAll('input[name="shell"]').forEach(input => { input.checked = false; });
       const choice = document.createElement('label');
       choice.className = `shell-choice${selected ? ' active' : ''}`;
-      choice.innerHTML = `<input type="radio" name="shell" value="minimum" ${selected ? 'checked' : ''}><span class="shell-preview shell-preview-minimum"><i></i><b></b><em></em></span><div><strong>Minimum</strong><small>Visual amplo, escuro e direto, com a identidade FLORALIS.</small></div>`;
+      choice.innerHTML = `<input type="radio" name="shell" value="minimum" ${selected ? 'checked' : ''}><span class="shell-preview shell-preview-minimum"><i></i><b></b><em></em></span><div><strong>Minimum</strong><small>Visual amplo, escuro e direto, com a identidade FLORALES.</small></div>`;
       shellGrid.append(choice);
     }
 
@@ -386,7 +386,7 @@
     if (themeSelect && !themeSelect.querySelector('option[value="minimum"]')) {
       const option = document.createElement('option');
       option.value = 'minimum';
-      option.textContent = 'Minimum FLORALIS';
+      option.textContent = 'Minimum FLORALES';
       themeSelect.append(option);
       if (layoutForm.querySelector('.pos-theme-preview.theme-minimum')) themeSelect.value = 'minimum';
     }

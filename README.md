@@ -1,4 +1,4 @@
-# FLORALIS PDV & ERP
+# FLORALES PDV & ERP
 
 Sistema unificado de vendas e gestão para floriculturas, lojas de buquês e presentes. A mesma base funciona na web, como PWA instalável, aplicativo Windows e aplicativo Android.
 

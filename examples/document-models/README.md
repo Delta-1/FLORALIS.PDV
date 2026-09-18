@@ -1,6 +1,6 @@
 # Exemplos de modelos de documentos
 
-Estes arquivos servem como referência editável para os modelos do centro **Documentos** do FLORALIS PDV & ERP. Eles usam o mesmo formato exportado pelo editor visual do sistema.
+Estes arquivos servem como referência editável para os modelos do centro **Documentos** do FLORALES PDV & ERP. Eles usam o mesmo formato exportado pelo editor visual do sistema.
 
 ## Exemplos incluídos
 
@@ -19,4 +19,4 @@ Estes arquivos servem como referência editável para os modelos do centro **Doc
 - `footer`: texto do rodapé.
 - `fields`: campos e colunas, na ordem em que devem aparecer.
 
-Os modelos visuais são próprios do FLORALIS. Eles podem ser alterados no editor do sistema ou diretamente nestes JSONs para criar novas variações.
+Os modelos visuais são próprios do FLORALES. Eles podem ser alterados no editor do sistema ou diretamente nestes JSONs para criar novas variações.

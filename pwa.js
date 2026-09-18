@@ -22,7 +22,7 @@
     guide.setAttribute('aria-modal', 'true');
     guide.innerHTML = `
       <div class="pwa-guide-card">
-        <img src="./assets/icon-maskable-192.png" alt="Ícone FLORALIS">
+        <img src="./assets/icon-maskable-192.png" alt="Ícone FLORALES">
         <div><small>INSTALAR APLICATIVO</small><strong>${title}</strong><p>${text}</p></div>
         <button type="button" aria-label="Fechar instruções">×</button>
       </div>`;
@@ -33,7 +33,7 @@
 
   async function install() {
     if (isStandalone()) {
-      showGuide('FLORALIS já está instalado', 'Abra o sistema pelo ícone disponível na tela inicial ou no menu de aplicativos.');
+      showGuide('FLORALES já está instalado', 'Abra o sistema pelo ícone disponível na tela inicial ou no menu de aplicativos.');
       return false;
     }
 
@@ -50,7 +50,7 @@
       return false;
     }
 
-    showGuide('Instalar FLORALIS', 'Abra o menu do navegador e escolha “Instalar aplicativo” ou “Adicionar à tela inicial”.');
+    showGuide('Instalar FLORALES', 'Abra o menu do navegador e escolha “Instalar aplicativo” ou “Adicionar à tela inicial”.');
     return false;
   }
 

@@ -18,14 +18,14 @@ Deno.serve(async request => {
       email,
       password,
       email_confirm: true,
-      user_metadata: { name: 'Administrador FLORALIS', must_change_password: true },
+      user_metadata: { name: 'Administrador FLORALES', must_change_password: true },
       app_metadata: { provisioned_by: 'bootstrap-admin' },
     })
     if (createError || !created.user) throw createError || new Error('No fue posible crear el administrador')
 
     const { data: business, error: businessError } = await admin.from('businesses').insert({
-      name: Deno.env.get('FLORALIS_BUSINESS_NAME') || 'FLORALIS Flores e Presentes',
-      legal_name: Deno.env.get('FLORALIS_LEGAL_NAME') || 'FLORALIS Flores e Presentes',
+      name: Deno.env.get('FLORALIS_BUSINESS_NAME') || 'FLORALES Flores e Presentes',
+      legal_name: Deno.env.get('FLORALIS_LEGAL_NAME') || 'FLORALES Flores e Presentes',
       currency: 'Bs',
     }).select('id').single()
     if (businessError || !business) {
@@ -37,7 +37,7 @@ Deno.serve(async request => {
       business_id: business.id,
       user_id: created.user.id,
       role: 'admin',
-      display_name: 'Administrador FLORALIS',
+      display_name: 'Administrador FLORALES',
       email,
       job_title: 'Administrador',
       supervisor: true,

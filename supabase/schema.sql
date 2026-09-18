@@ -1,4 +1,4 @@
--- FLORALIS PDV — schema inicial para Supabase/PostgreSQL
+-- FLORALES PDV — schema inicial para Supabase/PostgreSQL
 -- Execute no SQL Editor de um projeto novo. Não use service_role no frontend.
 create extension if not exists pgcrypto;
 

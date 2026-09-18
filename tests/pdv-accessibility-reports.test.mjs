@@ -101,9 +101,9 @@ test('clients list shows account data and offers a right-click credit menu', () 
   assert.match(documents, /entry\.saleId&&s\.uuid&&entry\.saleId===s\.uuid/);
 });
 
-test('Minimum is a distinct FLORALIS shell and PDV theme', () => {
+test('Minimum is a distinct FLORALES shell and PDV theme', () => {
   assert.match(experience, /value="minimum"/);
-  assert.match(experience, /Minimum FLORALIS/);
+  assert.match(experience, /Minimum FLORALES/);
   assert.match(experience, /data-shell="minimum"/);
   assert.match(experience, /pdv\.pos-theme-minimum/);
   assert.match(experience, /PASSE OU BUSQUE O PRODUTO/);

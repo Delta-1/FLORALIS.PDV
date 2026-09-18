@@ -2,7 +2,7 @@
   "name": "floralis-pdv-erp",
   "version": "1.0.1",
   "private": true,
-  "description": "Aplicativo unificado FLORALIS PDV & ERP para Windows, Android e PWA.",
+  "description": "Aplicativo unificado FLORALES PDV & ERP para Windows, Android e PWA.",
   "main": "native/electron/main.cjs",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
@@ -28,7 +28,7 @@
   },
   "build": {
     "appId": "com.floralis.pdverp",
-    "productName": "FLORALIS PDV ERP",
+    "productName": "FLORALES PDV ERP",
     "directories": {
       "output": "release"
     },
@@ -50,7 +50,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "FLORALIS PDV ERP"
+      "shortcutName": "FLORALES PDV ERP"
     },
     "portable": {
       "artifactName": "FLORALIS-PDV-ERP-Portable-${version}-${arch}.${ext}"

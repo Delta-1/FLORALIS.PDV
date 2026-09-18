@@ -43,7 +43,7 @@ assert.match(studio, /const styles=\{official:'Oficial tabular'\}/, 'todos os do
 assert.match(studio, /style:'official',accent:'#111111'/, 'configuração salva não deve reativar estilos decorativos');
 assert.match(styles, /Padrão oficial tabular para todos os documentos gerados/, 'relatórios genéricos devem possuir grade oficial própria');
 assert.match(styles, /style-official:not\(\.reference-document\).*border:1px solid #222/, 'documentos oficiais devem usar bordas tabulares pretas');
-assert.match(styles, /Tipografia operacional FLORALIS/, 'sistema deve possuir padrão tipográfico único');
+assert.match(styles, /Tipografia operacional FLORALES/, 'sistema deve possuir padrão tipográfico único');
 assert.doesNotMatch(app, /state\.clients=\[\];state\.products=\[\];state\.sales=\[\]/, 'atualizações não podem apagar a operação local');
 assert.match(app, /Migrações preservadoras/, 'migrações locais devem preservar os dados existentes');
 assert.match(styles, /font-family:Arial,Helvetica,sans-serif!important/, 'sistema e documentos devem usar Arial');

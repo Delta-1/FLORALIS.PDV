@@ -4,7 +4,7 @@ O frontend permanece em `mode: 'demo'` até existir um projeto Supabase real. A 
 
 ## 1. Criar e preparar o projeto
 
-1. Crie um projeto Supabase novo para o FLORALIS PDV & ERP.
+1. Crie um projeto Supabase novo para o FLORALES PDV & ERP.
 2. Execute `supabase/schema.sql` no SQL Editor. Para uma instalação já existente, aplique também `supabase/migrations/20260821_auth_management.sql`.
 3. Implante as Edge Functions `bootstrap-admin` e `manage-user`.
 4. Configure os secrets abaixo somente no ambiente das funções:
@@ -13,8 +13,8 @@ O frontend permanece em `mode: 'demo'` até existir um projeto Supabase real. A 
 FLORALIS_SETUP_KEY=<segredo aleatório com 32 ou mais caracteres>
 FLORALIS_ADMIN_EMAIL=admin@floralis.local
 FLORALIS_ADMIN_PASSWORD=<senha temporária forte com 12 ou mais caracteres>
-FLORALIS_BUSINESS_NAME=FLORALIS Flores e Presentes
-FLORALIS_LEGAL_NAME=FLORALIS Flores e Presentes
+FLORALIS_BUSINESS_NAME=FLORALES Flores e Presentes
+FLORALIS_LEGAL_NAME=FLORALES Flores e Presentes
 ALLOWED_ORIGINS=https://floralis-pdv-erp.deltaspriggan.chatgpt.site
 ```
 

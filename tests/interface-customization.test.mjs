@@ -42,10 +42,19 @@ test('PDV palettes, independent dark mode and reinforced borders are styled', ()
   assert.match(styles, /\.pdv\.pos-border-strong/);
 });
 
-test('Floralis supports BOB, BRL and USD directly in the PDV', () => {
+test('Florales supports BOB, BRL and USD directly in the PDV', () => {
   for (const currency of ['BOB', 'BRL', 'USD']) assert.match(app, new RegExp(`${currency}:`));
   assert.match(app, /data-pos-currency/);
   assert.match(app, /id="currencyForm"/);
   assert.match(app, /currency:saleCurrency/);
   assert.match(styles, /\.pos-currency-switch/);
+});
+
+
+test('Reports separate received amounts by sale currency', () => {
+  assert.match(app, /Entradas por moneda/);
+  assert.match(app, /Bolivianos recibidos/);
+  assert.match(app, /Reales recibidos/);
+  assert.match(app, /saleOriginalAmount/);
+  assert.match(app, /displayAmount:convertMoney\(total,saleCurrency\)/);
 });

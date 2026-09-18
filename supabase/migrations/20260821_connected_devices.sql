@@ -1,4 +1,4 @@
--- Registro seguro dos dispositivos que acessam a instalação exclusiva da FLORALIS.
+-- Registro seguro dos dispositivos que acessam a instalação exclusiva da FLORALES.
 create table if not exists public.connected_devices (
   id uuid primary key default gen_random_uuid(),
   business_id uuid not null references public.businesses(id) on delete cascade,

@@ -24,4 +24,4 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await Promise.all(files.map(file => cp(join(root, file), join(output, file))));
 await cp(join(root, 'assets'), join(output, 'assets'), { recursive: true });
-console.log(`Site Floralis preparado em ${output}`);
+console.log(`Site Florales preparado em ${output}`);
