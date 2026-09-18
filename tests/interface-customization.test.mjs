@@ -56,5 +56,7 @@ test('Reports separate received amounts by sale currency', () => {
   assert.match(app, /Bolivianos recibidos/);
   assert.match(app, /Reales recibidos/);
   assert.match(app, /saleOriginalAmount/);
+  assert.match(app, /reportCurrencyPaymentRows/);
+  assert.match(app, /Método de pago/);
   assert.match(app, /displayAmount:convertMoney\(total,saleCurrency\)/);
 });
