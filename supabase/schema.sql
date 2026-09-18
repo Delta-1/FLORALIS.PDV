@@ -90,7 +90,11 @@ create index sale_items_sale_idx on public.sale_items(business_id,sale_id);
 create table public.cash_movements (
   id uuid primary key default gen_random_uuid(), business_id uuid not null references public.businesses(id) on delete cascade,
   kind public.cash_kind not null, description text not null, amount numeric(14,2) not null check(amount > 0),
-  employee_id uuid references auth.users(id), employee_name text, sale_id uuid references public.sales(id), created_at timestamptz not null default now()
+  employee_id uuid references auth.users(id), employee_name text, sale_id uuid references public.sales(id),
+  currency_code text not null default 'BOB' check(currency_code in ('BOB','BRL','USD')),
+  exchange_rate numeric(18,6) not null default 1 check(exchange_rate>0),
+  display_amount numeric(14,2) not null default 0 check(display_amount>=0),
+  created_at timestamptz not null default now()
 );
 create index cash_business_date_idx on public.cash_movements(business_id,created_at desc);
 
@@ -98,7 +102,7 @@ create table public.business_settings (
   business_id uuid primary key references public.businesses(id) on delete cascade,
   theme jsonb not null default '{"mode":"light","palette":"floralis","accent":"#652276","scale":"medium","font":"inter","shell":"nex","language":"es"}',
   pos_layout jsonb not null default '{"dock":"sidebar","density":"comfortable","theme":"touch","mode":"light","palette":"floralis","borders":"strong","items":["client","wholesale","delivery","notes","payment"]}',
-  app_config jsonb not null default '{"baseCurrency":"BOB","exchangeRates":{"BOB":1,"BRL":0.75,"USD":0.14}}'::jsonb,
+  app_config jsonb not null default '{"baseCurrency":"BOB","exchangeRates":{"BOB":1,"BRL":0.5,"USD":0.14}}'::jsonb,
   updated_at timestamptz not null default now()
 );
 

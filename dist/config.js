@@ -1,10 +1,6 @@
-// Configuração pública do frontend. Nunca coloque a service_role aqui.
+// Configuração pública do frontend. Use somente a chave publicável.
 window.FLORALIS_CONFIG = {
-  mode: 'demo',
-  supabaseUrl: '',
-  supabasePublishableKey: '',
-  demoUsers: [
-    { email: 'admin@example.invalid', password: 'admin123', role: 'admin', name: 'Administrador Demo' },
-    { email: 'employee@example.invalid', password: 'func123', role: 'employee', name: 'Funcionario Demo Caixa' }
-  ]
+  mode: 'supabase',
+  supabaseUrl: 'https://armovjqaqmhekescgtiy.supabase.co',
+  supabasePublishableKey: 'sb_publishable_DtDxaPDTrF_Ih7zfQWBISA_93tvRN9W'
 };
