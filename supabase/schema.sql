@@ -75,6 +75,8 @@ create table public.sales (
   currency_code text not null default 'BOB' check (currency_code in ('BOB','BRL','USD')),
   exchange_rate numeric(18,6) not null default 1 check (exchange_rate > 0),
   display_total numeric(14,2) not null default 0 check (display_total >= 0),
+  amount_bob numeric(14,2) not null default 0 check (amount_bob >= 0),
+  amount_brl numeric(14,2) not null default 0 check (amount_brl >= 0),
   notes text, status text not null default 'completed', created_at timestamptz not null default now(), unique(business_id,sale_number), unique(business_id,client_sale_id)
 );
 create index sales_business_date_idx on public.sales(business_id,created_at desc);
@@ -94,6 +96,8 @@ create table public.cash_movements (
   currency_code text not null default 'BOB' check(currency_code in ('BOB','BRL','USD')),
   exchange_rate numeric(18,6) not null default 1 check(exchange_rate>0),
   display_amount numeric(14,2) not null default 0 check(display_amount>=0),
+  amount_bob numeric(14,2) not null default 0 check(amount_bob>=0),
+  amount_brl numeric(14,2) not null default 0 check(amount_brl>=0),
   created_at timestamptz not null default now()
 );
 create index cash_business_date_idx on public.cash_movements(business_id,created_at desc);

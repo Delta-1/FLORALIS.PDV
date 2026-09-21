@@ -3,7 +3,7 @@ const studio={category:'Todos',context:{}};
 const formats={a4:'A4 vertical',landscape:'A4 horizontal',thermal80:'Térmico 80 mm',thermal58:'Térmico 58 mm',label:'Etiqueta'};
 const styles={official:'Oficial tabular'};
 const fieldSets={
- sales:[['number','Número'],['date','Fecha'],['time','Hora'],['client','Cliente'],['seller','Vendedor'],['payment','Pago'],['currency','Moneda'],['originalTotal','Total en moneda'],['kind','Tipo'],['items','Ítems'],['subtotal','Subtotal'],['discount','Descuento'],['total','Total']],
+ sales:[['number','Número'],['date','Fecha'],['time','Hora'],['client','Cliente'],['seller','Vendedor'],['payment','Pago'],['amountBob','Bolivianos (Bs)'],['amountBrl','Reales (R$)'],['kind','Tipo'],['items','Ítems'],['subtotal','Subtotal'],['discount','Descuento'],['total','Total']],
  saleItems:[['code','Código'],['product','Producto'],['quantity','Cantidad'],['unit','Unidad'],['unitPrice','Precio unitario'],['discount','Descuento'],['total','Total']],
  products:[['code','Código'],['name','Producto'],['category','Categoría'],['unit','Unidad'],['stock','Stock'],['minimum','Mínimo'],['cost','Costo'],['price','Precio'],['wholesale','Mayorista'],['supplier','Proveedor'],['profit','Margen']],
  clients:[['code','Código'],['name','Cliente'],['type','Tipo'],['document','CI / NIT'],['phone','Teléfono'],['city','Ciudad'],['balance','Saldo'],['purchases','Compras'],['total','Total comprado']],
@@ -37,7 +37,7 @@ const modelData=[
  ['employee-performance','Resumen de desempeño del funcionario','Documentos','employeeSales',['a4','landscape'],['number','date','client','payment','items','total'],'badge','employee'],
  ['product-file','Ficha del producto','Documentos','products',['a4'],['code','name','category','unit','stock','cost','price','wholesale','supplier'],'box'],
  ['general-sales-report','Informe general de ventas y vendedores','Ventas','sellerSummary',['landscape','a4'],['rank','name','role','sales','items','total','ticket','share','highlight'],'chart'],
- ['currency-sales-report','Ventas e ingresos por moneda','Ventas','sales',['landscape','a4'],['date','number','client','payment','currency','originalTotal','total'],'cash'],
+ ['currency-sales-report','Ventas e ingresos por moneda','Ventas','sales',['landscape','a4'],['date','number','client','payment','amountBob','amountBrl'],'cash'],
  ['revenue','Facturación','Ventas','sales',['a4','landscape'],['date','number','client','seller','total'],'chart'],
  ['sales-count','Cantidad de ventas','Ventas','sales',['a4','landscape'],['date','number','kind','items','total'],'chart'],
  ['average-ticket','Ticket promedio','Ventas','sales',['a4'],['date','seller','client','total'],'chart'],
@@ -85,6 +85,7 @@ const stripInternal=row=>Object.fromEntries(Object.entries(row).filter(([key])=>
 const documentSaleCurrency=sale=>currencyId(sale.currency||state.settings.baseCurrency||'BOB');
 const documentSaleOriginal=sale=>{const stored=Number(sale.displayTotal);return Number.isFinite(stored)&&stored>=0?stored:convertMoney(Number(sale.total||0),documentSaleCurrency(sale))};
 const documentCurrencyMoney=sale=>{const code=documentSaleCurrency(sale),item=currencies[code];return`${item.symbol} ${documentSaleOriginal(sale).toLocaleString(item.locale,{minimumFractionDigits:2,maximumFractionDigits:2})}`};
+const documentSaleColumn=(sale,code)=>{const key=code==='BRL'?'amountBrl':'amountBob',stored=Number(sale?.[key]);if(Number.isFinite(stored)&&stored>=0)return stored;return documentSaleCurrency(sale)===code?documentSaleOriginal(sale):0};
 const salesInRange=config=>(state.sales||[]).filter(s=>(s.type||'Venta')==='Venta'&&inRange(s.date,config));
 const saleFor=(context=studio.context)=>{const key=context?.saleId;return key?(state.sales||[]).find(s=>s.id===key||s.uuid===key||s.clientSaleId===key):null};
 const employeeFor=(context=studio.context)=>{const key=context?.employeeId,name=context?.employeeName;return key||name?(state.employees||[]).find(e=>(key&&e.id===key)||(name&&e.name===name)):null};
@@ -98,7 +99,7 @@ function sourceRows(source,context=studio.context,config=currentMonthRange()){
  const selectedSale=saleFor(context),selectedEmployee=employeeFor(context);
  if(source==='saleItems'){const items=selectedSale?.receiptItems||selectedSale?.itemsDetail||[];return items.map((item,index)=>{const quantity=Number(item.quantity||item.qty||0),unitPrice=Number(item.unitPrice??item.price??0),basePrice=Number(item.basePrice??unitPrice),lineDiscount=Math.max(0,(basePrice-unitPrice)*quantity),product=(state.products||[]).find(entry=>entry.id===(item.productId||item.product_id||item.id));return{code:item.code||item.productCode||product?.code||item.product_id||String(index).padStart(6,'0'),product:item.name||item.product||item.description||product?.name||'Producto',quantity:quantity.toLocaleString(locale()),unit:item.unit||product?.unit||'Unidad',unitPrice:money(unitPrice),discount:money(lineDiscount),total:money(item.total??quantity*unitPrice)}})}
  if(source==='clientDebt')return clientDebtRows(context);
- if(source==='sales')return(state.sales||[]).filter(s=>inRange(s.date,config)).map(s=>({number:s.id,date:safeDate(s.date),time:safeTime(s.date),client:s.client||'Consumidor final',seller:s.employee||'—',payment:s.payment||'—',currency:documentSaleCurrency(s),originalTotal:documentCurrencyMoney(s),kind:s.type||'Venta',items:s.items||0,subtotal:money(s.subtotal??s.total),discount:money(s.discountTotal||0),total:money(s.total)}));
+ if(source==='sales')return(state.sales||[]).filter(s=>inRange(s.date,config)).map(s=>({number:s.id,date:safeDate(s.date),time:safeTime(s.date),client:s.client||'Consumidor final',seller:s.employee||'—',payment:s.payment||'—',amountBob:directCurrencyMoney(documentSaleColumn(s,'BOB'),'BOB'),amountBrl:directCurrencyMoney(documentSaleColumn(s,'BRL'),'BRL'),kind:s.type||'Venta',items:s.items||0,subtotal:money(s.subtotal??s.total),discount:money(s.discountTotal||0),total:money(s.total)}));
  if(source==='employeeSales')return(state.sales||[]).filter(s=>inRange(s.date,config)&&((selectedEmployee?.id&&s.employeeId===selectedEmployee.id)||(selectedEmployee?.name&&s.employee===selectedEmployee.name))).map(s=>({number:s.id,date:safeDate(s.date),time:safeTime(s.date),client:s.client||'Consumidor final',payment:s.payment||'—',items:s.items||0,total:money(s.total)}));
  if(source==='products')return(state.products||[]).map(p=>({code:p.code||p.ean||'—',name:p.name,category:p.category||'—',unit:p.unit||'Unidad',stock:Number(p.stock||0).toLocaleString(locale()),minimum:Number(p.minStock||0).toLocaleString(locale()),cost:money(p.cost),price:money(p.price),wholesale:money(p.wholesale),supplier:p.supplier||'—',profit:`${p.cost?Math.round((p.price-p.cost)/p.cost*100):0}%`}));
  if(source==='clients')return(state.clients||[]).map(c=>({code:c.code||'—',name:c.name,type:c.type||'—',document:c.document||'—',phone:c.phone||'—',city:c.city||'—',balance:money(c.balance),purchases:c.purchases||0,total:money(c.total)}));
