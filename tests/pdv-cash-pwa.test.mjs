@@ -25,3 +25,23 @@ test('PWA installation lives in settings instead of floating over the UI', () =>
   assert.match(app, /data-action="install-pwa"/);
   assert.match(app, /La instalación queda aquí para no ocupar espacio en el PDV/);
 });
+
+test('production login hides demonstration credentials', () => {
+  assert.doesNotMatch(app, /data-demo-login/);
+  assert.doesNotMatch(app, /admin@example\.invalid/);
+  assert.doesNotMatch(app, /func123/);
+});
+
+test('tutorials are on demand inside settings and never start automatically', () => {
+  assert.doesNotMatch(index, /data-view="tutorial"/);
+  assert.match(app, /\['tutorial','Tutoriales'\]/);
+  assert.match(app, /open-tutorial-center'[\s\S]*ui\.settingsTab='tutorial'/);
+  assert.doesNotMatch(app, /showFirstTutorial/);
+  assert.match(app, /Las guías solo comienzan cuando usted las elige/);
+});
+
+test('settings expose release notes', () => {
+  assert.match(app, /\['updates','Notas de actualización'\]/);
+  assert.match(app, /Versión de producción/);
+  assert.match(app, /releaseNotes/);
+});
