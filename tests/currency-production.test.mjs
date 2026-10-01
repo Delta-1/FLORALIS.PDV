@@ -6,7 +6,7 @@ const [app, backend, config, migration, separateColumnsMigration] = await Promis
   readFile(new URL('../app.js', import.meta.url), 'utf8'),
   readFile(new URL('../backend.js', import.meta.url), 'utf8'),
   readFile(new URL('../config.js', import.meta.url), 'utf8'),
-  readFile(new URL('../supabase/migrations/20260918143000_precise_currency_accounting.sql', import.meta.url), 'utf8'),
+  readFile(new URL('../supabase/migrations/20261001153000_native_dual_currency_cash_sessions.sql', import.meta.url), 'utf8'),
   readFile(new URL('../supabase/migrations/20260921170000_separate_bob_brl_columns.sql', import.meta.url), 'utf8'),
 ]);
 
@@ -17,19 +17,29 @@ test('production frontend points to Supabase without privileged credentials', ()
 });
 
 test('sale, currency and cash movement are committed atomically', () => {
-  assert.match(backend, /rpc\/register_sale_v2/);
+  assert.match(backend, /rpc\/register_sale_v3/);
   assert.doesNotMatch(backend.match(/async function registerSale[\s\S]*?async function saveGeneratedDocument/)?.[0] || '', /set_sale_currency/);
-  assert.match(migration, /create or replace function public\.register_sale_v2/);
-  assert.match(migration, /currency total mismatch/);
-  assert.match(migration, /insert into cash_movements[\s\S]*currency_code,exchange_rate,display_amount/);
-  assert.match(migration, /revoke execute on function public\.set_sale_currency/);
+  assert.match(migration, /create or replace function public\.register_sale_v3/);
+  assert.match(migration, /p_currency_code not in \('BOB','BRL'\)/);
+  assert.match(migration, /insert into public\.cash_movements/);
+  assert.match(migration, /cash_session_id,terminal_id/);
+  assert.match(migration, /revoke all on function public\.register_sale_v3/);
 });
 
 test('PDV reference editor does not mix reporting currencies', () => {
-  assert.match(app, /safeBobQuote/);
-  assert.match(app, /BRL:1\/safeBobQuote\(brlInBob\)/);
-  assert.match(app, /Caja e informes no hacen conversiones/);
-  assert.match(app, /Los informes nunca convierten una moneda a la otra/);
+  assert.match(app, /dualCurrencyNativePricing:true/);
+  assert.match(app, /Ningún precio, cobro, saldo o informe se calcula mediante cotización/);
+  assert.match(app, /Solo como anotación administrativa\. No altera ningún valor del sistema/);
+  assert.doesNotMatch(app, /function convertMoney/);
+  assert.doesNotMatch(backend, /p_exchange_rate/);
+});
+
+test('native prices and persistent cash sessions are part of the production migration', () => {
+  for (const column of ['price_bob', 'price_brl', 'wholesale_bob', 'wholesale_brl']) assert.match(migration, new RegExp(column));
+  assert.match(migration, /create table if not exists public\.cash_sessions/);
+  assert.match(migration, /create table if not exists public\.cash_closings/);
+  assert.match(migration, /create or replace function public\.open_cash_session_v1/);
+  assert.match(migration, /create or replace function public\.close_cash_session_v1/);
 });
 
 test('reporting amounts are persisted in independent BOB and BRL columns', () => {

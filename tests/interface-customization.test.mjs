@@ -47,8 +47,10 @@ test('Florales accepts BOB and BRL directly in the PDV', () => {
   assert.match(app, /data-pos-currency/);
   assert.match(app, /id="currencyForm"/);
   assert.match(app, /id="posCurrencyForm"/);
-  assert.match(app, /exchangeRatesFromBobQuotes/);
-  assert.match(app, /R\$ 1 = Bs 2/);
+  assert.match(app, /priceBob/);
+  assert.match(app, /priceBrl/);
+  assert.match(app, /productPrice\(p,ui\.posCurrency/);
+  assert.match(app, /Sin conversiones automáticas/);
   assert.match(app, /currency:saleCurrency/);
   assert.match(styles, /\.pos-currency-switch/);
 });
@@ -63,6 +65,6 @@ test('Reports separate received amounts by sale currency', () => {
   assert.match(app, /Método de pago/);
   assert.match(app, /amountBob/);
   assert.match(app, /amountBrl/);
-  assert.match(app, /Los informes nunca convierten una moneda a la otra/);
-  assert.match(app, /displayAmount:originalTotal/);
+  assert.match(app, /Suma directa, sin conversión/);
+  assert.match(app, /displayAmount:total/);
 });

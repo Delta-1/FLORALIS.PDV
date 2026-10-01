@@ -42,8 +42,8 @@ test('GitHub builds Windows executables and Android APK', () => {
   const packageJson = read('package.json');
   assert.match(packageJson, /electron-builder/);
   assert.match(packageJson, /--publish never/);
-  assert.match(packageJson, /FLORALIS-PDV-ERP-Setup/);
-  assert.match(packageJson, /FLORALIS-PDV-ERP-Portable/);
+  assert.match(packageJson, /FLORALES-PDV-ERP-Setup/);
+  assert.match(packageJson, /FLORALES-PDV-ERP-Portable/);
   assert.match(workflow, /npm run desktop:build/);
   assert.match(workflow, /branches:\s+\- main/);
   assert.match(workflow, /release\/\*\.exe/);

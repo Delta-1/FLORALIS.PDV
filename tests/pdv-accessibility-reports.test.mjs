@@ -77,7 +77,7 @@ test('PDV catalog and cart scroll independently and training product has an imag
 test('clients list shows account data and offers a right-click credit menu', () => {
   const documents = read('document-studio.js');
   const backend2 = read('backend.js');
-  assert.match(app, /<th>Nacimiento<\/th>/);
+  assert.match(app, /<th>Saldo Bs<\/th><th>Saldo R\$<\/th>/);
   assert.match(app, /data-client-row="\$\{c\.id\}"/);
   assert.match(app, /function birthdateText\(value\)/);
   assert.match(app, /name="birthdate"/);
@@ -89,8 +89,8 @@ test('clients list shows account data and offers a right-click credit menu', () 
     assert.match(app, new RegExp(action.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   assert.match(app, /function renderDebtFlow\(\)/);
-  assert.match(app, /async function registerClientPayment\(client,amount,method,note\)/);
-  assert.match(app, /recordLedger\(client\.id,'credit',amount/);
+  assert.match(app, /async function registerClientPayment\(client,amount,method,note,currency='BOB'\)/);
+  assert.match(app, /FloralisBackend\.registerClientPayment\(client\.id,amount,code/);
   assert.match(app, /addCashMovement\(movement\)/);
   assert.match(app, /debtAmountForm/);
   assert.match(app, /debtPaymentForm/);
