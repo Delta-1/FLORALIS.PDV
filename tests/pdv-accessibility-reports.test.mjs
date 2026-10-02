@@ -91,6 +91,8 @@ test('clients list shows account data and offers a right-click credit menu', () 
   assert.match(app, /function renderDebtFlow\(\)/);
   assert.match(app, /async function registerClientPayment\(client,amount,method,note,currency='BOB'\)/);
   assert.match(app, /FloralisBackend\.registerClientPayment\(client\.id,amount,code/);
+  assert.match(app, /if\(action==='payment'\)\{\s*await registerClientPayment\(c,amount,d\.paymentMethod\|\|'Efectivo',description,code\)/);
+  assert.doesNotMatch(app, /if\(action==='payment'\)\{const session=ensureCashSession\(\),movement=/);
   assert.match(app, /addCashMovement\(movement\)/);
   assert.match(app, /debtAmountForm/);
   assert.match(app, /debtPaymentForm/);
