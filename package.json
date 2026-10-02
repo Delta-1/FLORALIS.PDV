@@ -1,6 +1,6 @@
 {
   "name": "florales-pdv-erp",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "private": true,
   "description": "Aplicativo unificado FLORALES PDV & ERP para Windows, Android e PWA.",
   "main": "native/electron/main.cjs",

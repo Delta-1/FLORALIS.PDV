@@ -2,11 +2,12 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const [app, backend, config, migration, separateColumnsMigration] = await Promise.all([
+const [app, backend, config, migration, paymentMigration, separateColumnsMigration] = await Promise.all([
   readFile(new URL('../app.js', import.meta.url), 'utf8'),
   readFile(new URL('../backend.js', import.meta.url), 'utf8'),
   readFile(new URL('../config.js', import.meta.url), 'utf8'),
   readFile(new URL('../supabase/migrations/20261001153000_native_dual_currency_cash_sessions.sql', import.meta.url), 'utf8'),
+  readFile(new URL('../supabase/migrations/20261002004212_payment_currency_without_exchange.sql', import.meta.url), 'utf8'),
   readFile(new URL('../supabase/migrations/20260921170000_separate_bob_brl_columns.sql', import.meta.url), 'utf8'),
 ]);
 
@@ -17,13 +18,14 @@ test('production frontend points to Supabase without privileged credentials', ()
 });
 
 test('sale, currency and cash movement are committed atomically', () => {
-  assert.match(backend, /rpc\/register_sale_v3/);
+  assert.match(backend, /rpc\/register_sale_v4/);
   assert.doesNotMatch(backend.match(/async function registerSale[\s\S]*?async function saveGeneratedDocument/)?.[0] || '', /set_sale_currency/);
-  assert.match(migration, /create or replace function public\.register_sale_v3/);
-  assert.match(migration, /p_currency_code not in \('BOB','BRL'\)/);
-  assert.match(migration, /insert into public\.cash_movements/);
-  assert.match(migration, /cash_session_id,terminal_id/);
-  assert.match(migration, /revoke all on function public\.register_sale_v3/);
+  assert.match(paymentMigration, /create or replace function public\.register_sale_v4/);
+  assert.match(paymentMigration, /p_payment_currency_code not in \('BOB','BRL'\)/);
+  assert.match(paymentMigration, /insert into public\.cash_movements/);
+  assert.match(paymentMigration, /cash_session_id,terminal_id/);
+  assert.match(paymentMigration, /revoke all on function public\.register_sale_v4/);
+  assert.match(paymentMigration, /currency_code,unit_cost_bob,unit_cost_brl[\s\S]*'BOB'/);
 });
 
 test('PDV reference editor does not mix reporting currencies', () => {

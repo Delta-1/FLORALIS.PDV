@@ -42,16 +42,17 @@ test('PDV palettes, independent dark mode and reinforced borders are styled', ()
   assert.match(styles, /\.pdv\.pos-border-strong/);
 });
 
-test('Florales accepts BOB and BRL directly in the PDV', () => {
+test('Florales sells in BOB and records the received payment currency separately', () => {
   for (const currency of ['BOB', 'BRL']) assert.match(app, new RegExp(`${currency}:`));
-  assert.match(app, /data-pos-currency/);
+  assert.match(app, /data-payment-currency="BOB"/);
+  assert.match(app, /data-payment-currency="BRL"/);
   assert.match(app, /id="currencyForm"/);
   assert.match(app, /id="posCurrencyForm"/);
   assert.match(app, /priceBob/);
-  assert.match(app, /priceBrl/);
-  assert.match(app, /productPrice\(p,ui\.posCurrency/);
-  assert.match(app, /Sin conversiones automáticas/);
+  assert.match(app, /productPrice\(p,'BOB'/);
+  assert.match(app, /El sistema no calcula cambio/);
   assert.match(app, /currency:saleCurrency/);
+  assert.match(app, /paymentCurrency/);
   assert.match(styles, /\.pos-currency-switch/);
 });
 
@@ -66,5 +67,6 @@ test('Reports separate received amounts by sale currency', () => {
   assert.match(app, /amountBob/);
   assert.match(app, /amountBrl/);
   assert.match(app, /Suma directa, sin conversión/);
-  assert.match(app, /displayAmount:total/);
+  assert.match(app, /displayAmount:paymentAmount/);
+  assert.match(app, /saleReportCurrency=sale=>currencyId\(sale\.paymentCurrency/);
 });
