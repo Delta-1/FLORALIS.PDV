@@ -175,3 +175,13 @@ test('reports render distinct operational data sets', () => {
   assert.match(app, /data-report-select/);
   assert.match(styles, /Central de relatórios operacionais/);
 });
+
+test('cash closing reports totals per payment method and currency', () => {
+  for (const label of ['Efectivo bolivianos', 'Efectivo reales', 'PIX (R$)', 'QR (Bs)', 'Tarjeta Bs', 'Tarjeta R$']) assert.match(app, new RegExp(label.replace(/[()$]/g, '\\$&')));
+  assert.match(app, /breakdown:cashBreakdown\(sessionRows\)/);
+  assert.match(app, /function cashClosingSummary\(closing\)/);
+});
+
+test('dismissing a receipt starts a new sale instead of keeping the charged cart', () => {
+  assert.match(app, /if\(\$\('#layer \[data-action="new-sale"\]'\)\)\{closeLayer\(\);return openPos\(true\)\}/);
+});

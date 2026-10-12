@@ -759,3 +759,12 @@ html[data-palette="floralis"] .login-visual .eyebrow{color:#ead7ef}
 @media screen{.layer-card.modal>.layer-head,.layer-card.modal>.checkout-flow>.layer-head{position:sticky;top:0;z-index:3;background:var(--surface)}}
 @media screen and (min-width:721px){.layer-card.modal{max-height:calc(100dvh - 32px);margin-top:16px;margin-bottom:16px;overflow:auto}}
 @media screen and (max-width:720px){.layer-card.modal{max-height:calc(100dvh - max(48px,6dvh));overflow:auto}}
+
+/* Cierre de caja: desglose por medio de pago y moneda */
+.cash-breakdown{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.cash-breakdown h3{margin:0;padding:10px 14px;font-size:14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.cash-breakdown>div{min-height:38px;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;border-bottom:1px solid var(--line)}
+.cash-breakdown>div:last-child{border-bottom:0}
+.cash-breakdown b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.cash-breakdown .cash-breakdown-out{color:var(--muted)}
+@media print{.cash-closing-modal .cash-breakdown{border:0}.cash-closing-modal .cash-breakdown>div{min-height:0;padding:3px 0;font-size:11px}.cash-closing-modal .pos-cash-totals{display:grid;gap:4px;font-size:11px}}
