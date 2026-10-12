@@ -808,6 +808,7 @@ document.addEventListener('keydown',e=>{
 function refreshNetworkStatus(){const status=queueStatus(),pill=$('#syncPill');if(pill){pill.className=`sync-pill ${status[1]}`;pill.textContent=`● ${status[0]}`}if(navigator.onLine)syncOfflineSales()}
 async function refreshAuditLogs(){if(!authSession||!canAdmin()||ui.view!=='logs'||!FloralisBackend.isRemote())return;try{const logs=await FloralisBackend.loadAuditLogs();if(!Array.isArray(logs))return;state.auditLogs=logs;save();if(!['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))render()}catch{}}
 window.addEventListener('online',refreshNetworkStatus);window.addEventListener('offline',refreshNetworkStatus);
+addEventListener('floralis:session-expired',()=>{if(!authSession)return;authSession=null;closeLayer();renderLogin('Sesión inválida')});
 async function boot(){applyBrand();injectIcons();if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});const restored=await FloralisBackend.restoreSession();if(restored){await startAuthenticated(restored);syncOfflineSales()}else renderLogin()}
 setInterval(()=>{if(authSession)checkAutomaticCashClose()},30000);
 setInterval(refreshAuditLogs,15000);

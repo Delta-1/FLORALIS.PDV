@@ -211,3 +211,12 @@ test('review fixes: sale currency hydration, OTRO collision, stock alerts, histo
   assert.match(app, /<th>Total venta<\/th>/);
   assert.match(app, /\['Todos','Efectivo','Tarjeta','PIX','QR','Transferencia','Cuenta cliente'\]/);
 });
+
+test('expired or revoked sessions fall back to login instead of SYS-001', () => {
+  const backend = read('backend.js');
+  assert.match(backend, /payload\.message \|\| payload\.msg/);
+  assert.match(backend, /if \(authed\) await refresh\(\)/);
+  assert.match(backend, /refreshing \|\|=/);
+  assert.match(backend, /dispatchEvent\(new Event\('floralis:session-expired'\)\)/);
+  assert.match(app, /addEventListener\('floralis:session-expired'[\s\S]{0,120}renderLogin\('Sesión inválida'\)/);
+});

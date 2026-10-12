@@ -14,6 +14,8 @@
 
   async function request(path, options = {}) {
     if (!config.supabaseUrl || !config.supabasePublishableKey) throw new Error('Supabase não configurado');
+    const authed = session?.refreshToken && !path.startsWith('/auth/v1/token');
+    if (authed) await refresh();
     const headers = {
       apikey: config.supabasePublishableKey,
       'Content-Type': 'application/json',
@@ -24,9 +26,10 @@
     const response = await fetch(`${config.supabaseUrl}${path}`, { ...options, headers, body: json(options.body) });
     if (!response.ok) {
       const payload = await response.json().catch(() => ({}));
-      const error = new Error(payload.message || payload.error_description || payload.hint || `Erro ${response.status}`);
+      const error = new Error(payload.message || payload.msg || payload.error_description || payload.hint || `Erro ${response.status}`);
       error.status = response.status;
       error.code = payload.code || '';
+      if (authed && response.status === 401) expire(error);
       throw error;
     }
     if (response.status === 204) return null;
@@ -52,19 +55,36 @@
     return session;
   }
 
-  async function refresh() {
-    if (config.mode !== 'supabase' || !session?.refreshToken || Date.now() < (session.expiresAt || 0) - 60000) return session;
-    const auth = await request('/auth/v1/token?grant_type=refresh_token', { method: 'POST', body: { refresh_token: session.refreshToken } });
-    session = { ...session, accessToken: auth.access_token, refreshToken: auth.refresh_token, expiresAt: Date.now() + auth.expires_in * 1000 };
-    localStorage.setItem(sessionKey, JSON.stringify(session));
-    return session;
+  // Una sola renovación en vuelo: el refresh token de Supabase es de un solo uso.
+  let refreshing = null;
+  function refresh() {
+    if (config.mode !== 'supabase' || !session?.refreshToken || Date.now() < (session.expiresAt || 0) - 60000) return Promise.resolve(session);
+    return refreshing ||= (async () => {
+      try {
+        const auth = await request('/auth/v1/token?grant_type=refresh_token', { method: 'POST', body: { refresh_token: session.refreshToken } });
+        session = { ...session, accessToken: auth.access_token, refreshToken: auth.refresh_token, expiresAt: Date.now() + auth.expires_in * 1000 };
+        localStorage.setItem(sessionKey, JSON.stringify(session));
+        return session;
+      } catch (error) {
+        if (error.status) expire(error); // el servidor rechazó la renovación; sin red se reintenta luego
+        throw error;
+      } finally { refreshing = null; }
+    })();
+  }
+
+  // Sesión vencida o revocada: se cierra y la app vuelve al login.
+  function expire(error) {
+    error.message = 'Sesión inválida: inicie sesión nuevamente';
+    if (!session) return;
+    logout();
+    window.dispatchEvent(new Event('floralis:session-expired'));
   }
 
   async function restoreSession() {
     try { session = JSON.parse(localStorage.getItem(sessionKey) || 'null'); } catch { session = null; }
     if (!session) return null;
     businessId = session.businessId;
-    try { await refresh(); return session; } catch { logout(); return null; }
+    try { await refresh(); return session; } catch (error) { if (error.status) return null; return session; }
   }
 
   function logout() { session = null; businessId = null; localStorage.removeItem(sessionKey); }
