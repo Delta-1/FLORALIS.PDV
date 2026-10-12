@@ -21,7 +21,7 @@ test('interface scale has three proportional choices and Supabase persistence', 
   assert.match(app, /state\.settings\.appearance=\{mode:d\.mode,palette,accent,shell,scale,font\}/);
   assert.match(backend, /theme:\s*\{\s*\.\.\.\(appearance\s*\|\|/);
   assert.match(experience, /html\[data-scale="large"\]\{font-size:18px\}/);
-  assert.match(experience, /pos-touch-shortcuts button\{min-height:104px/);
+  assert.match(experience, /html\[data-scale="large"\] \.pdv-total strong\{font-size:36px!important\}/);
 });
 
 test('system typography offers several fonts with preview and persistence', () => {
@@ -108,7 +108,6 @@ test('Minimum is a distinct FLORALES shell and PDV theme', () => {
   assert.match(experience, /Minimum FLORALES/);
   assert.match(experience, /data-shell="minimum"/);
   assert.match(experience, /pdv\.pos-theme-minimum/);
-  assert.match(experience, /PASSE OU BUSQUE O PRODUTO/);
   assert.doesNotMatch(experience, /LC sistemas|LC WEB|LCsistemas/i);
 });
 
@@ -131,18 +130,25 @@ test('standalone PDV remembers user profiles but always asks for a password', ()
   assert.match(pdvHtml, /sessionStorage\.removeItem\('floralis\.pos\.unlocked'\)/);
 });
 
-test('Minimum stays dark and Venta rápida can collapse completely', () => {
+test('Minimum stays dark', () => {
   assert.match(experience, /pos-theme-minimum \.suggestions/);
   assert.match(experience, /pos-theme-minimum \.qty-stepper/);
-  assert.match(experience, /pdv\.sidebar-collapsed \.pdv-sidebar\{display:none!important\}/);
-  assert.match(experience, /pdv\.sidebar-collapsed \.pos-panel-reopen\{display:flex!important\}/);
 });
 
-test('footer dock never leaves the quick-sale side rail visible', () => {
-  assert.match(experience, /pdv\.dock-footer \.pdv-sidebar,\.pdv\.dock-footer \.pos-panel-toggle,\.pdv\.dock-footer \.pos-panel-reopen\{display:none!important\}/);
-  assert.match(experience, /function syncFooterDockState\(\)/);
-  assert.match(experience, /\.dock-footer\.sidebar-collapsed/);
-  assert.match(experience, /toggle\.click\(\)/);
+test('simplified PDV keeps secondary options in the menu and checkout in the footer', () => {
+  assert.match(app, /<details class="pos-menu">/);
+  for (const action of ['pos-client', 'toggle-wholesale', 'pos-delivery', 'pos-notes', 'pos-settings']) assert.match(app, new RegExp(`data-action="${action}"`));
+  assert.match(app, /data-pos-command="F7"/);
+  assert.match(app, /class="btn primary pos-checkout" data-pos-command="F9"/);
+  assert.doesNotMatch(app, /pdv-sidebar|pos-touch-shortcuts/);
+  assert.match(styles, /\.pdv-simple \.pos-sale-workspace\{/);
+});
+
+test('dialogs close when tapping the backdrop, like Escape', () => {
+  assert.match(app, /function dismissLayer\(\)/);
+  assert.match(app, /isLayerBackdrop\(e\.target\)&&isLayerBackdrop\(layerPointerTarget\)/);
+  assert.match(app, /e\.key==='Escape'&&!\$\('#layer'\)\.hidden\)\{e\.preventDefault\(\);return dismissLayer\(\)\}/);
+  assert.match(styles, /\.layer-card\.modal\{max-height:calc\(100dvh - 32px\)/);
 });
 
 test('PDV shortcuts provide notebook alternatives and stay readable', () => {
@@ -153,7 +159,6 @@ test('PDV shortcuts provide notebook alternatives and stay readable', () => {
   assert.match(app, /const altCommands=/);
   assert.match(app, /checkout-key-list/);
   assert.match(styles, /Atalhos legíveis e confiáveis em notebooks/);
-  assert.match(styles, /min-width:721px\) and \(max-width:1100px\).*\.pos-touch-shortcuts span\{display:block/s);
 });
 
 test('reports render distinct operational data sets', () => {

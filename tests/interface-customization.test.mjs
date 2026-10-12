@@ -42,18 +42,18 @@ test('PDV palettes, independent dark mode and reinforced borders are styled', ()
   assert.match(styles, /\.pdv\.pos-border-strong/);
 });
 
-test('Florales sells in BOB and records the received payment currency separately', () => {
+test('Florales sells in the currency chosen in the PDV and is paid in that same currency', () => {
   for (const currency of ['BOB', 'BRL']) assert.match(app, new RegExp(`${currency}:`));
-  assert.match(app, /data-payment-currency="BOB"/);
-  assert.match(app, /data-payment-currency="BRL"/);
+  assert.match(app, /data-pos-currency-set="\$\{id\}"/);
+  assert.match(app, /localStorage\.setItem\('floralis\.pos\.currency',next\)/);
+  assert.match(app, /paymentCurrency=saleCurrency/);
   assert.match(app, /id="currencyForm"/);
   assert.match(app, /id="posCurrencyForm"/);
   assert.match(app, /priceBob/);
-  assert.match(app, /productPrice\(p,'BOB'/);
-  assert.match(app, /El sistema no calcula cambio/);
+  assert.match(app, /productPrice\(p,ui\.posCurrency/);
   assert.match(app, /currency:saleCurrency/);
   assert.match(app, /paymentCurrency/);
-  assert.match(styles, /\.pos-currency-switch/);
+  assert.match(styles, /\.pos-currency-toggle/);
 });
 
 

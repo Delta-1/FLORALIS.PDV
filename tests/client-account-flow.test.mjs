@@ -23,7 +23,8 @@ test('customer picker returns to payment and supports search', () => {
 });
 
 test('PDV keeps customer search, creation and selection inside the sale', () => {
-  assert.match(pdvExperience, /function ensureClientStrip\(\)/);
+  assert.match(pdvExperience, /dataset\.posClientName/);
+  assert.match(app, /data-pos-client-name=/);
   assert.match(pdvExperience, /data-pdv-client-search/);
   assert.match(pdvExperience, /data-pdv-client-new/);
   assert.match(pdvExperience, /data-pdv-client-clear/);

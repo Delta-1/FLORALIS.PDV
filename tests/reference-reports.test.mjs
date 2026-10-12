@@ -44,7 +44,7 @@ assert.match(styles, /Tipografia operacional FLORALES/, 'sistema deve possuir pa
 assert.doesNotMatch(app, /state\.clients=\[\];state\.products=\[\];state\.sales=\[\]/, 'atualizações não podem apagar a operação local');
 assert.match(app, /Migrações preservadoras/, 'migrações locais devem preservar os dados existentes');
 assert.match(styles, /font-family:Arial,Helvetica,sans-serif!important/, 'sistema e documentos devem usar Arial');
-assert.match(styles, /text-transform:uppercase/, 'todos os textos devem aparecer em maiúsculas');
+assert.doesNotMatch(styles, /text-transform:uppercase/, 'textos não devem ser forçados a maiúsculas');
 assert.match(styles, /font-variant-numeric:tabular-nums lining-nums/, 'valores devem usar números tabulares alinhados');
 assert.match(styles, /receipt-modal>\*:not\(\.layer-body\)\{display:none!important\}/, 'impressão do cupom não deve incluir botões do sistema');
 assert.match(styles, /padding:2mm!important/, 'cupom deve usar margens térmicas pequenas');
