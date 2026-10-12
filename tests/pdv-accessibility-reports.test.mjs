@@ -178,10 +178,36 @@ test('reports render distinct operational data sets', () => {
 
 test('cash closing reports totals per payment method and currency', () => {
   for (const label of ['Efectivo bolivianos', 'Efectivo reales', 'PIX (R$)', 'QR (Bs)', 'Tarjeta Bs', 'Tarjeta R$']) assert.match(app, new RegExp(label.replace(/[()$]/g, '\\$&')));
-  assert.match(app, /breakdown:cashBreakdown\(sessionRows\)/);
   assert.match(app, /function cashClosingSummary\(closing\)/);
 });
 
 test('dismissing a receipt starts a new sale instead of keeping the charged cart', () => {
   assert.match(app, /if\(\$\('#layer \[data-action="new-sale"\]'\)\)\{closeLayer\(\);return openPos\(true\)\}/);
+});
+
+test('closing breakdown is computed server-side and stored with the closing', () => {
+  const migration = read('supabase/migrations/20261012060000_cash_closing_breakdown.sql');
+  assert.match(migration, /add column if not exists breakdown jsonb/);
+  assert.match(migration, /public\.cash_movement_method\(description\)/);
+  assert.match(migration, /closed_by_name,breakdown/);
+  assert.match(backend, /breakdown: Array\.isArray\(row\.breakdown\)/);
+  assert.match(app, /breakdown:remote\?\.breakdown\|\|cashBreakdown\(sessionRows\)/);
+  assert.match(app, /data-closing-view=/);
+});
+
+test('cash movement method rule matches sales and debt payments', () => {
+  const rule = app.match(/const cashMovementMethod=(description=>\{[^\n]*?\});/)[1];
+  const method = eval(rule);
+  assert.equal(method('Venta V000012 — PIX'), 'PIX');
+  assert.equal(method('Venta #V1 — Tarjeta'), 'Tarjeta');
+  assert.equal(method('Pago Efectivo — nota — Crediario'), 'Efectivo');
+  assert.equal(method('Ajuste manual'), 'Otros ingresos');
+});
+
+test('review fixes: sale currency hydration, OTRO collision, stock alerts, history, filters', () => {
+  assert.match(backend, /currency: \(itemsBySale\[row\.id\] \|\| \[\]\)\[0\]\?\.currency_code === 'BRL'/);
+  assert.match(read('supabase/migrations/20261011130000_open_price_products.sql'), /on conflict \(business_id,code\) do nothing/);
+  assert.match(app, /ui\.productFilter==='Stock bajo'&&!p\.openPrice/);
+  assert.match(app, /<th>Total venta<\/th>/);
+  assert.match(app, /\['Todos','Efectivo','Tarjeta','PIX','QR','Transferencia','Cuenta cliente'\]/);
 });

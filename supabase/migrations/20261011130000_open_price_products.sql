@@ -6,7 +6,7 @@ alter table public.products add column if not exists open_price boolean not null
 insert into public.products(business_id,code,name,category,unit,notes,open_price)
 select id,'OTRO','Otro producto','Otros','Unidad','Producto genérico: descripción y precio se ingresan al vender.',true
   from public.businesses
-on conflict (business_id,code) do update set open_price=true;
+on conflict (business_id,code) do nothing; -- no reutilizar un producto OTRO existente
 
 create or replace function public.register_sale_v5(
   p_business_id uuid,p_client_id uuid,p_payment_method text,p_items jsonb,
