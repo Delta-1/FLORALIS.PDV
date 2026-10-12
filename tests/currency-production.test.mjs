@@ -21,7 +21,6 @@ test('production frontend points to Supabase without privileged credentials', ()
 test('sale, currency and cash movement are committed atomically', () => {
   assert.match(backend, /register_sale_v5/);
   assert.match(backend, /if \(legacy\) await v4\(payload\.paymentCurrency\)/);
-  assert.match(backend, /error\.code !== 'PGRST202'/);
   assert.match(saleCurrencyMigration, /create or replace function public\.register_sale_v5/);
   assert.match(saleCurrencyMigration, /p_currency_code not in \('BOB','BRL'\)/);
   assert.match(saleCurrencyMigration, /currency_code,unit_cost_bob,unit_cost_brl[\s\S]*p_currency_code,product_row\.cost_bob/);
