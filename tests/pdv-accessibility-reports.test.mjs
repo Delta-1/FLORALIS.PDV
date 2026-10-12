@@ -127,7 +127,7 @@ test('standalone PDV remembers user profiles but always asks for a password', ()
   assert.match(experience, /Quem vai usar o PDV\?/);
   assert.match(experience, /Escolha seu perfil e digite apenas a senha\./);
   assert.match(experience, /profiles\.unshift\(\{userId: session\.userId \|\| session\.email, name: session\.name, email: session\.email, role: session\.role \|\| 'employee'\}\)/);
-  assert.match(pdvHtml, /sessionStorage\.removeItem\('floralis\.pos\.unlocked'\)/);
+  assert.doesNotMatch(pdvHtml, /sessionStorage\.removeItem\('floralis\.pos\.unlocked'\)/, 'recargar no debe cerrar la sesión');
 });
 
 test('Minimum stays dark', () => {
