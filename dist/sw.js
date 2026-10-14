@@ -1,7 +1,7 @@
-const CACHE = 'floralis-shell-v56';
+const CACHE = 'floralis-shell-v57';
 const CORE = [
-  './', './index.html', './pdv.html', './styles.css?v=44', './config.js?v=17',
-  './backend.js?v=38', './app.js?v=49', './document-studio.js?v=33', './pwa.js?v=17', './import-wizard.js?v=18', './pdv-experience.js?v=29', './native-shell.js?v=1', './manifest.webmanifest',
+  './', './index.html', './pdv.html', './styles.css?v=45', './config.js?v=17',
+  './backend.js?v=39', './app.js?v=50', './document-studio.js?v=33', './pwa.js?v=17', './import-wizard.js?v=18', './pdv-experience.js?v=29', './native-shell.js?v=1', './manifest.webmanifest',
   './assets/floralis-logo.png', './assets/floralis-mark.png',
   './assets/icon-512.png', './assets/icon-maskable-192.png', './assets/icon-maskable-512.png',
   './assets/apple-touch-icon.png', './assets/favicon.ico'

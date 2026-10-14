@@ -684,15 +684,17 @@ html[data-palette="floralis"] .login-visual .eyebrow{color:#ead7ef}
 .pdv-simple #posCatalogRegion{min-height:0;display:flex}
 .pdv-simple #posCatalogRegion>.pos-catalog{flex:1;min-width:0}
 .pdv-simple .pos-catalog,.pdv-simple .pos-cart-panel{height:100%;min-height:0}
-/* Catálogo compacto: sin bloque de letra cuando no hay imagen */
-.pdv-simple .pos-product-grid{flex:1;min-height:0;overflow:auto;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:auto;padding:10px;gap:8px}
-.pdv-simple .pos-product-card{min-height:0;padding:9px 11px;border-radius:12px;gap:2px}
+/* Tarjetas del catálogo: foto completa y datos de venta sobre una franja legible. */
+.pdv-simple .pos-product-grid{flex:1;min-height:0;overflow:auto;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:172px;padding:10px;gap:8px}
+.pdv-simple .pos-product-card{position:relative;min-height:0;padding:10px 12px;border-radius:12px;gap:3px;justify-content:flex-end;background:var(--accent-soft);isolation:isolate}
+.pdv-simple .pos-product-card.has-image{color:#fff;background:#242028}
+.pdv-simple .pos-product-card.has-image::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.06) 20%,rgba(0,0,0,.24) 48%,rgba(0,0,0,.88) 100%)}
 .pdv-simple .pos-product-visual:not(.has-image){display:none}
-.pdv-simple .pos-product-visual.has-image{height:64px;margin-bottom:4px}
-.pdv-simple .pos-product-name{height:auto;margin-top:0;font-size:14px;line-height:1.25}
-.pdv-simple .pos-product-meta{margin-top:2px;font-size:11px}
-.pdv-simple .pos-product-card>strong{padding-top:4px;font-size:16px}
-.pdv-simple .pos-product-card>i{display:none}
+.pdv-simple .pos-product-visual.has-image{position:absolute;inset:0;z-index:-2;width:100%;height:100%;padding:0;border-radius:0}
+.pdv-simple .pos-product-visual small,.pdv-simple .pos-product-meta,.pdv-simple .pos-product-card>i{display:none}
+.pdv-simple .pos-product-name{position:relative;height:auto;margin:0;font-size:14px;line-height:1.25;-webkit-line-clamp:2}
+.pdv-simple .pos-product-card>strong{position:relative;margin:0;padding:0;font-size:16px;line-height:1.2}
+.pdv-simple .pos-product-card.has-image>strong{color:#fff}
 /* Carrito: líneas compactas, pie con total y Cobrar */
 .pdv-simple .pos-cart-panel{display:flex;flex-direction:column}
 .pdv-simple .pos-cart-panel>header{min-height:52px;padding:8px 12px 8px 8px;gap:8px;justify-content:flex-start}
@@ -754,6 +756,25 @@ html[data-palette="floralis"] .login-visual .eyebrow{color:#ead7ef}
  .pos-line{grid-template-columns:minmax(0,1fr) auto 30px;row-gap:4px}
  .pos-line-main{grid-column:1/-1}
 }
+
+@media(max-width:1260px){
+ .pdv-simple .pos-catalog-head{display:none}
+ .pdv-simple .pdv-title,.pdv.pdv-simple.pos-theme-minimum .pdv-title{min-height:52px;padding:5px 12px}
+ .pdv-simple .pdv-title h1,html[data-scale="large"] .pdv-simple .pdv-title h1{font-size:18px!important}
+ .pdv-simple .pdv-search,.pdv.pdv-simple.pos-theme-minimum .pdv-search{height:44px;padding:2px 12px;align-items:center}
+ .pdv-simple .pdv-search .search-field,.pdv-simple .pdv-search .search-field input,.pdv.pdv-simple.pos-theme-minimum .pdv-search .search-field input,html[data-scale="large"] .pdv-simple .pdv-search .search-field input{height:40px;min-height:40px;font-size:16px!important}
+ .pdv-simple .pos-category-strip{padding:4px 8px;gap:6px}
+ .pdv-simple .pos-category-strip button{height:32px;min-height:32px;padding-inline:11px}
+}
+@media(max-width:720px){
+ .pdv-simple .pdv-title,.pdv.pdv-simple.pos-theme-minimum .pdv-title{min-height:50px;padding:4px 10px}
+ .pdv-simple .pdv-search,.pdv.pdv-simple.pos-theme-minimum .pdv-search{margin:0}
+ .pdv-simple .pos-product-grid{grid-auto-rows:172px}
+}
+.payment-change{min-height:48px;margin-top:10px;padding:10px 14px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;font-size:19px}
+.payment-change.insufficient{background:#fff0f2;color:var(--danger)}
+[data-product-stock-field][hidden]{display:none!important}
+.field .switch-line>div>strong,.field .switch-line>div>small{display:block}
 
 /* Diálogos: la card se desplaza por dentro y la cabecera con la X queda siempre visible */
 @media screen{.layer-card.modal>.layer-head,.layer-card.modal>.checkout-flow>.layer-head{position:sticky;top:0;z-index:3;background:var(--surface)}}
