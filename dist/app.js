@@ -722,7 +722,7 @@ document.addEventListener('click',e=>{
 	  'toggle-wholesale':toggleWholesalePos,
 	  'pos-client':posClientPicker,
   'back-client':()=>clientAccount(e.target.closest('[data-id]').dataset.id),'toggle-wholesale-setting':()=>{state.settings.wholesale=!state.settings.wholesale;save();render()},
-	  'cash-close':async()=>{try{const closing=await closeCash('manual');if(closing)FloralesDocuments.openCashClosing(closing.id)}catch(error){toast(error,'error')}},'cash-open':()=>cashOpenForm(false),
+	  'cash-close':async()=>{try{const closing=await closeCash('manual');if(closing)cashClosingSummary(closing)}catch(error){toast(error,'error')}},'cash-open':()=>cashOpenForm(false),
 	  'pos-cash-open':()=>cashOpenForm(true),'pos-cash-close':async()=>{try{const closing=await closeCash('manual');if(closing){auditEvent('Caja cerrada','Caja',`Terminal ${terminalId} · Bs ${closing.totalBob} · R$ ${closing.totalBrl}`,'success');cashClosingSummary(closing)}}catch(error){toast(error,'error')}},
 	  'remove-brand-logo':()=>{state.settings.logo='';save();FloralisBackend.saveBusiness(state.settings).catch(()=>{});render();toast('Logo removido')},
   'export-all':()=>{auditEvent('Respaldo exportado','Datos','Exportación completa en JSON');download(`floralis-respaldo-${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(state,null,2),'application/json');toast('Respaldo generado')},
