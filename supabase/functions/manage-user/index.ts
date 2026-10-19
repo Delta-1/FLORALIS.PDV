@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { resetPassword } from './password-reset.ts'
 
 const allowedOrigins = (Deno.env.get('ALLOWED_ORIGINS') || '').split(',').map(value => value.trim()).filter(Boolean)
 
@@ -43,6 +44,11 @@ Deno.serve(async request => {
     const businessId = String(payload.businessId || '')
     const { data: membership } = await caller.from('memberships').select('role,active').eq('business_id', businessId).eq('user_id', auth.user.id).single()
     if (membership?.role !== 'admin' || !membership.active) throw new Error('Solo un administrador puede gestionar accesos')
+
+    if (payload.action === 'reset-password') {
+      const result = await resetPassword({ payload, businessId, membership, auth, caller, admin })
+      return new Response(JSON.stringify(result), { headers: { ...access.headers, 'Content-Type': 'application/json' } })
+    }
 
     const action = payload.action === 'update' ? 'update' : 'create'
     const email = String(payload.email || '').trim().toLowerCase()

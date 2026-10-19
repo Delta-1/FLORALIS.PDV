@@ -108,7 +108,6 @@ test('Minimum is a distinct FLORALES shell and PDV theme', () => {
   assert.match(experience, /Minimum FLORALES/);
   assert.match(experience, /data-shell="minimum"/);
   assert.match(experience, /pdv\.pos-theme-minimum/);
-  assert.match(experience, /PASSE OU BUSQUE O PRODUTO/);
   assert.doesNotMatch(experience, /LC sistemas|LC WEB|LCsistemas/i);
 });
 

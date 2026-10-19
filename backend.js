@@ -24,7 +24,7 @@
     const response = await fetch(`${config.supabaseUrl}${path}`, { ...options, headers, body: json(options.body) });
     if (!response.ok) {
       const payload = await response.json().catch(() => ({}));
-      const error = new Error(payload.message || payload.error_description || payload.hint || `Erro ${response.status}`);
+      const error = new Error(payload.message || payload.error_description || (typeof payload.error==='string'?payload.error:'') || payload.hint || `Erro ${response.status}`);
       error.status = response.status;
       error.code = payload.code || '';
       throw error;
@@ -138,6 +138,7 @@
     localStorage.setItem(sessionKey, JSON.stringify(session));
     return user;
   }
+  async function resetEmployeePassword(userId,password,supervisorCode){return manageEmployee({action:'reset-password',userId,password,supervisorCode})}
   async function manageEmployee(employee) {
     if (!isRemote()) throw new Error('Gestión remota no configurada');
     return request('/functions/v1/manage-user', { method: 'POST', body: { ...employee, businessId } });
@@ -166,5 +167,5 @@
   }
   async function loadDevices() { if (!isRemote() || session?.role !== 'admin') return []; const rows = await request(`${scoped('connected_devices')}&select=*&order=last_seen.desc`); return (rows || []).map(fromSnake); }
 
-  window.FloralisBackend = { login, logout, restoreSession, loadWorkspace, saveProduct, saveClient, saveBusiness, saveSettings, updateCredentials, manageEmployee, recordLedger, registerSale, changeSale, saveGeneratedDocument, ensureTrainingProduct, addCashMovement, registerClientPayment, openCashSession, closeCashSession, recordAudit, loadAuditLogs, registerDevice, loadDevices, isRemote, getSession: () => session, getBusinessId: () => businessId };
+  window.FloralisBackend = { login, logout, restoreSession, loadWorkspace, saveProduct, saveClient, saveBusiness, saveSettings, updateCredentials, manageEmployee, resetEmployeePassword, recordLedger, registerSale, changeSale, saveGeneratedDocument, ensureTrainingProduct, addCashMovement, registerClientPayment, openCashSession, closeCashSession, recordAudit, loadAuditLogs, registerDevice, loadDevices, isRemote, getSession: () => session, getBusinessId: () => businessId };
 })();
