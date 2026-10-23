@@ -835,3 +835,15 @@ html[data-palette="floralis"] .login-visual .eyebrow{color:#ead7ef}
 .pdv-simple .pos-line-main strong{white-space:normal;overflow-wrap:anywhere}
 .pdv-simple button:focus-visible,.pos-menu summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.pdv-simple *{animation:none!important;transition:none!important}}
+
+/* Cash received and change stay legible on touch screens and printed receipts. */
+.received-input-row{display:flex;align-items:stretch;gap:8px}.received-input-row input{flex:1;min-width:0}.received-input-row .btn{white-space:nowrap}
+.received-amount-field .payment-change{display:grid;gap:8px;padding:16px;border:1px solid var(--accent);background:var(--accent-soft)}
+.payment-change>div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}.payment-change span{font-size:16px;font-weight:600}.payment-change strong{font-size:30px;font-variant-numeric:tabular-nums}.payment-change small{font-size:13px;font-weight:400}
+.received-amount-field .payment-change.insufficient{border-color:var(--danger);background:#fff0f2;color:var(--danger)}
+.payment-shortfall{padding:12px;border:1px solid var(--line);border-radius:10px}.payment-shortfall p{margin:0 0 10px;font-size:14px}.payment-shortfall .btn{width:100%;white-space:normal}
+.additional-cash{padding:12px;border:1px solid var(--line);border-radius:10px;display:grid;gap:10px}.payment-shortfall[hidden],.additional-cash[hidden]{display:none!important}
+.receipt-summary>.receipt-change{padding:8px 0;border-top:1px dashed #999;border-bottom:2px solid #111;font-size:17px!important}
+.reference-payment-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #111;margin:10px 0;break-inside:avoid;color:#111}.reference-payment-summary>div{padding:8px;border-right:1px solid #111;display:grid;gap:4px}.reference-payment-summary>div:last-child{border-right:0;background:#eee}.reference-payment-summary span{font-size:10px}.reference-payment-summary strong{font-size:14px;font-variant-numeric:tabular-nums}
+@media(max-width:480px){.received-input-row{flex-wrap:wrap}.received-input-row .btn{width:100%}.payment-change strong{font-size:27px}}
+@media print{.receipt-summary>.receipt-change{color:#111!important}.reference-payment-summary{color:#111!important;border-color:#111!important}}
