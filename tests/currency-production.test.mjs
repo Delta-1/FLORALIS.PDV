@@ -2,13 +2,14 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const [app, backend, config, migration, paymentMigration, separateColumnsMigration] = await Promise.all([
+const [app, backend, config, migration, paymentMigration, separateColumnsMigration, saleCurrencyMigration] = await Promise.all([
   readFile(new URL('../app.js', import.meta.url), 'utf8'),
   readFile(new URL('../backend.js', import.meta.url), 'utf8'),
   readFile(new URL('../config.js', import.meta.url), 'utf8'),
   readFile(new URL('../supabase/migrations/20261001153000_native_dual_currency_cash_sessions.sql', import.meta.url), 'utf8'),
   readFile(new URL('../supabase/migrations/20261002004212_payment_currency_without_exchange.sql', import.meta.url), 'utf8'),
   readFile(new URL('../supabase/migrations/20260921170000_separate_bob_brl_columns.sql', import.meta.url), 'utf8'),
+  readFile(new URL('../supabase/migrations/20261011120000_sale_currency_v5.sql', import.meta.url), 'utf8'),
 ]);
 
 test('production frontend points to Supabase without privileged credentials', () => {
@@ -18,7 +19,14 @@ test('production frontend points to Supabase without privileged credentials', ()
 });
 
 test('sale, currency and cash movement are committed atomically', () => {
-  assert.match(backend, /rpc\/register_sale_v4/);
+  assert.match(backend, /register_sale_v5/);
+  assert.match(backend, /if \(legacy\) await v4\(payload\.paymentCurrency\)/);
+  assert.match(saleCurrencyMigration, /create or replace function public\.register_sale_v5/);
+  assert.match(saleCurrencyMigration, /p_currency_code not in \('BOB','BRL'\)/);
+  assert.match(saleCurrencyMigration, /currency_code,unit_cost_bob,unit_cost_brl[\s\S]*p_currency_code,product_row\.cost_bob/);
+  assert.match(saleCurrencyMigration, /record_client_movement_v3\(p_business_id,p_client_id,'debit',total_value,p_currency_code/);
+  assert.match(saleCurrencyMigration, /insert into public\.cash_movements/);
+  assert.match(saleCurrencyMigration, /revoke all on function public\.register_sale_v5/);
   assert.doesNotMatch(backend.match(/async function registerSale[\s\S]*?async function saveGeneratedDocument/)?.[0] || '', /set_sale_currency/);
   assert.match(paymentMigration, /create or replace function public\.register_sale_v4/);
   assert.match(paymentMigration, /p_payment_currency_code not in \('BOB','BRL'\)/);

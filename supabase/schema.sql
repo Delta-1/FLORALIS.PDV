@@ -45,6 +45,7 @@ create table public.products (
   id uuid primary key default gen_random_uuid(), business_id uuid not null references public.businesses(id) on delete cascade,
   code text not null, ean text, name text not null, category text not null default 'General', unit text not null default 'Unidad', notes text, image_url text,
   stock numeric(14,3) not null default 0, min_stock numeric(14,3) not null default 0,
+  track_stock boolean not null default true,
   cost numeric(14,2) not null default 0, price numeric(14,2) not null default 0, wholesale_price numeric(14,2) not null default 0,
   active boolean not null default true, created_at timestamptz not null default now(), updated_at timestamptz not null default now(),
   unique(business_id,code)

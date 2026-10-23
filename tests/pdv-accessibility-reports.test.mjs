@@ -21,7 +21,7 @@ test('interface scale has three proportional choices and Supabase persistence', 
   assert.match(app, /state\.settings\.appearance=\{mode:d\.mode,palette,accent,shell,scale,font\}/);
   assert.match(backend, /theme:\s*\{\s*\.\.\.\(appearance\s*\|\|/);
   assert.match(experience, /html\[data-scale="large"\]\{font-size:18px\}/);
-  assert.match(experience, /pos-touch-shortcuts button\{min-height:104px/);
+  assert.match(experience, /html\[data-scale="large"\] \.pdv-total strong\{font-size:36px!important\}/);
 });
 
 test('system typography offers several fonts with preview and persistence', () => {
@@ -127,21 +127,28 @@ test('standalone PDV remembers user profiles but always asks for a password', ()
   assert.match(experience, /Quem vai usar o PDV\?/);
   assert.match(experience, /Escolha seu perfil e digite apenas a senha\./);
   assert.match(experience, /profiles\.unshift\(\{userId: session\.userId \|\| session\.email, name: session\.name, email: session\.email, role: session\.role \|\| 'employee'\}\)/);
-  assert.match(pdvHtml, /sessionStorage\.removeItem\('floralis\.pos\.unlocked'\)/);
+  assert.doesNotMatch(pdvHtml, /sessionStorage\.removeItem\('floralis\.pos\.unlocked'\)/, 'recargar no debe cerrar la sesión');
 });
 
-test('Minimum stays dark and Venta rápida can collapse completely', () => {
+test('Minimum stays dark', () => {
   assert.match(experience, /pos-theme-minimum \.suggestions/);
   assert.match(experience, /pos-theme-minimum \.qty-stepper/);
-  assert.match(experience, /pdv\.sidebar-collapsed \.pdv-sidebar\{display:none!important\}/);
-  assert.match(experience, /pdv\.sidebar-collapsed \.pos-panel-reopen\{display:flex!important\}/);
 });
 
-test('footer dock never leaves the quick-sale side rail visible', () => {
-  assert.match(experience, /pdv\.dock-footer \.pdv-sidebar,\.pdv\.dock-footer \.pos-panel-toggle,\.pdv\.dock-footer \.pos-panel-reopen\{display:none!important\}/);
-  assert.match(experience, /function syncFooterDockState\(\)/);
-  assert.match(experience, /\.dock-footer\.sidebar-collapsed/);
-  assert.match(experience, /toggle\.click\(\)/);
+test('simplified PDV keeps secondary options in the menu and checkout in the footer', () => {
+  assert.match(app, /<details class="pos-menu">/);
+  for (const action of ['pos-client', 'toggle-wholesale', 'pos-delivery', 'pos-notes', 'pos-settings']) assert.match(app, new RegExp(`data-action="${action}"`));
+  assert.match(app, /data-pos-command="F7"/);
+  assert.match(app, /class="btn primary pos-checkout" data-pos-command="F9"/);
+  assert.doesNotMatch(app, /pdv-sidebar|pos-touch-shortcuts/);
+  assert.match(styles, /\.pdv-simple \.pos-sale-workspace\{/);
+});
+
+test('dialogs close when tapping the backdrop, like Escape', () => {
+  assert.match(app, /function dismissLayer\(\)/);
+  assert.match(app, /isLayerBackdrop\(e\.target\)&&isLayerBackdrop\(layerPointerTarget\)/);
+  assert.match(app, /e\.key==='Escape'&&!\$\('#layer'\)\.hidden\)\{e\.preventDefault\(\);return dismissLayer\(\)\}/);
+  assert.match(styles, /\.layer-card\.modal\{max-height:calc\(100dvh - 32px\)/);
 });
 
 test('PDV shortcuts provide notebook alternatives and stay readable', () => {
@@ -152,7 +159,6 @@ test('PDV shortcuts provide notebook alternatives and stay readable', () => {
   assert.match(app, /const altCommands=/);
   assert.match(app, /checkout-key-list/);
   assert.match(styles, /Atalhos legíveis e confiáveis em notebooks/);
-  assert.match(styles, /min-width:721px\) and \(max-width:1100px\).*\.pos-touch-shortcuts span\{display:block/s);
 });
 
 test('reports render distinct operational data sets', () => {
@@ -168,4 +174,49 @@ test('reports render distinct operational data sets', () => {
   assert.match(app, /function reportGroupRows\(rows,keyFn\)/);
   assert.match(app, /data-report-select/);
   assert.match(styles, /Central de relatórios operacionais/);
+});
+
+test('cash closing reports totals per payment method and currency', () => {
+  for (const label of ['Efectivo bolivianos', 'Efectivo reales', 'PIX (R$)', 'QR (Bs)', 'Tarjeta Bs', 'Tarjeta R$']) assert.match(app, new RegExp(label.replace(/[()$]/g, '\\$&')));
+  assert.match(app, /function cashClosingSummary\(closing\)/);
+});
+
+test('dismissing a receipt starts a new sale instead of keeping the charged cart', () => {
+  assert.match(app, /if\(\$\('#layer \[data-action="new-sale"\]'\)\)\{closeLayer\(\);return openPos\(true\)\}/);
+});
+
+test('closing breakdown is computed server-side and stored with the closing', () => {
+  const migration = read('supabase/migrations/20261012060000_cash_closing_breakdown.sql');
+  assert.match(migration, /add column if not exists breakdown jsonb/);
+  assert.match(migration, /public\.cash_movement_method\(description\)/);
+  assert.match(migration, /closed_by_name,breakdown/);
+  assert.match(backend, /breakdown: Array\.isArray\(row\.breakdown\)/);
+  assert.match(app, /breakdown:remote\?\.breakdown\|\|cashBreakdown\(sessionRows\)/);
+  assert.match(app, /data-closing-view=/);
+});
+
+test('cash movement method rule matches sales and debt payments', () => {
+  const rule = app.match(/const cashMovementMethod=(description=>\{[^\n]*?\});/)[1];
+  const method = eval(rule);
+  assert.equal(method('Venta V000012 — PIX'), 'PIX');
+  assert.equal(method('Venta #V1 — Tarjeta'), 'Tarjeta');
+  assert.equal(method('Pago Efectivo — nota — Crediario'), 'Efectivo');
+  assert.equal(method('Ajuste manual'), 'Otros ingresos');
+});
+
+test('review fixes: sale currency hydration, OTRO collision, stock alerts, history, filters', () => {
+  assert.match(backend, /currency: \(itemsBySale\[row\.id\] \|\| \[\]\)\[0\]\?\.currency_code === 'BRL'/);
+  assert.match(read('supabase/migrations/20261011130000_open_price_products.sql'), /on conflict \(business_id,code\) do nothing/);
+  assert.match(app, /ui\.productFilter==='Stock bajo'&&productTracksStock\(p\)/);
+  assert.match(app, /<th>Total venta<\/th>/);
+  assert.match(app, /\['Todos','Efectivo','Tarjeta','PIX','QR','Transferencia','Cuenta cliente'\]/);
+});
+
+test('expired or revoked sessions fall back to login instead of SYS-001', () => {
+  const backend = read('backend.js');
+  assert.match(backend, /payload\.message \|\| payload\.msg/);
+  assert.match(backend, /if \(authed\) await refresh\(\)/);
+  assert.match(backend, /refreshing \|\|=/);
+  assert.match(backend, /dispatchEvent\(new Event\('floralis:session-expired'\)\)/);
+  assert.match(app, /addEventListener\('floralis:session-expired'[\s\S]{0,120}renderLogin\('Sesión inválida'\)/);
 });
