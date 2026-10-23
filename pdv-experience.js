@@ -84,13 +84,6 @@
     html[data-scale="large"] .pos-cart-panel td{font-size:15px!important}
     html[data-scale="large"] .pdv-total span{font-size:14px!important}
     html[data-scale="large"] .pdv-total strong{font-size:36px!important}
-    html[data-scale="large"] .pos-touch-shortcuts button{min-height:104px;padding:14px 10px}
-    html[data-scale="large"] .pos-touch-shortcuts button span{font-size:15px!important}
-    html[data-scale="large"] .pos-touch-shortcuts kbd{font-size:13px!important}
-    html[data-scale="large"] .pos-client-strip{min-height:82px}
-    html[data-scale="large"] .pos-client-strip-copy small{font-size:11px}
-    html[data-scale="large"] .pos-client-strip-copy strong{font-size:17px}
-    html[data-scale="large"] .pos-client-strip-copy span{font-size:13px}
     html[data-scale="large"] .layer-card h2{font-size:30px!important}
     html[data-scale="large"] .login-card{max-width:520px;padding:42px}
     html[data-scale="large"] .login-card h2{font-size:34px!important}
@@ -134,16 +127,11 @@
     .pdv.pos-theme-minimum .suggestion:hover,.pdv.pos-theme-minimum .pos-category-strip button.active{background:rgba(var(--accent-rgb),.14);color:#fff}
     .pdv.pos-theme-minimum .sync-pill.online{background:#173a2a;color:#7ce1ab}.pdv.pos-theme-minimum .sync-pill.pending{background:#493819;color:#f4cf72}.pdv.pos-theme-minimum .sync-pill.offline{background:#4b2026;color:#ff9ca8}
     .pdv.pos-theme-minimum .pdv-title{min-height:86px;position:relative;border-bottom:1px solid var(--line)}
-    .pdv.pos-theme-minimum .pdv-title::after{content:none;position:absolute;left:50%;top:50%;max-width:44%;transform:translate(-50%,-50%);font-size:clamp(19px,2vw,32px);font-weight:900;letter-spacing:.06em;text-align:center;color:#fff;pointer-events:none}
-    html[lang^="pt"] .pdv.pos-theme-minimum .pdv-title::after{content:none}
     .pdv.pos-theme-minimum .pdv-title h1{font-size:17px}
     .pdv.pos-theme-minimum .pdv-search{padding-block:18px}
     .pdv.pos-theme-minimum .pdv-search .search-field input{height:62px;border:2px solid #696a70;font-size:18px}
     .pdv.pos-theme-minimum .pdv-search .search-field:focus-within input{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.18)}
     .pdv.pos-theme-minimum .quantity-field input{height:62px}
-    .pdv.pos-theme-minimum .pos-client-strip{border-radius:9px;background:#292a2d;border-color:#4a4b50;box-shadow:none}
-    .pdv.pos-theme-minimum .pos-client-strip-icon{border-radius:7px;background:#202124;box-shadow:none}
-    .pdv.pos-theme-minimum .pos-sale-workspace{grid-template-columns:.86fr 1.14fr;gap:14px}
     .pdv.pos-theme-minimum .pos-catalog,.pdv.pos-theme-minimum .pos-cart-panel{border-radius:8px;border-color:var(--line);box-shadow:none}
     .pdv.pos-theme-minimum .pos-product-card{border-radius:7px;background:#292a2d;border-color:#4a4b50;box-shadow:none}
     .pdv.pos-theme-minimum .pos-product-card:hover{border-color:#77787e;transform:none;box-shadow:none}
@@ -151,18 +139,9 @@
     .pdv.pos-theme-minimum .pdv-footer{border-color:var(--line)}
     .pdv.pos-theme-minimum .pdv-total{background:#191a1c;border:1px solid var(--line);border-radius:8px;padding:12px 18px}
     .pdv.pos-theme-minimum .pdv-total strong{font-size:34px}
-    .pdv.pos-theme-minimum .pdv-sidebar{border-color:var(--line)}
-    .pdv.pos-theme-minimum .pos-touch-shortcuts{gap:8px;padding:10px;border-top:1px solid var(--line)}
-    .pdv.pos-theme-minimum .pos-touch-shortcuts button{min-height:88px;border:1px solid #595a60;border-radius:8px}
-    .pdv.pos-theme-minimum .pos-touch-shortcuts button.finish{background:var(--accent);border-color:var(--accent);color:#fff}
-    .pdv.pos-theme-minimum .pos-touch-shortcuts button:hover{border-color:#fff;transform:none}
 
-    /* Venda rápida volta a recolher completamente e reabre pela aba lateral. */
-    @media(min-width:981px){.pdv:not(.sidebar-collapsed){grid-template-columns:minmax(0,1fr) 250px!important}.pdv:not(.sidebar-collapsed) .pdv-sidebar{display:flex!important;padding:48px 16px 16px!important;overflow:hidden!important}.pdv:not(.sidebar-collapsed) .pdv-side-head,.pdv:not(.sidebar-collapsed) .pdv-seller{display:block!important}.pdv:not(.sidebar-collapsed) .pdv-links{padding:20px 0 0!important;display:block!important}.pdv:not(.sidebar-collapsed) .pdv-links li{min-height:56px!important}.pdv:not(.sidebar-collapsed) .pos-widget{width:100%!important;height:auto!important;min-height:48px;padding:0 12px!important;display:flex!important;justify-content:flex-start!important}.pdv:not(.sidebar-collapsed) .pos-widget>span{display:inline!important}.pdv:not(.sidebar-collapsed) .pos-widget>span:last-child{margin-left:auto!important}.pdv:not(.sidebar-collapsed) .pos-panel-toggle{top:17px!important;right:14px!important;width:auto!important;height:32px!important;padding:0 10px!important;transform:none!important}.pdv:not(.sidebar-collapsed) .pos-panel-toggle span{display:inline!important}.pdv:not(.sidebar-collapsed) .pos-panel-toggle:before{transform:rotate(180deg)!important}.pdv.sidebar-collapsed{grid-template-columns:minmax(0,1fr)!important}.pdv.sidebar-collapsed .pdv-main{border-right:0!important}.pdv.sidebar-collapsed .pdv-sidebar{display:none!important}.pdv.sidebar-collapsed .pos-panel-reopen{display:flex!important}}
-    .pdv.dock-footer,.pdv.dock-footer.sidebar-collapsed{grid-template-columns:minmax(0,1fr)!important}.pdv.dock-footer .pdv-main{border-right:0!important}.pdv.dock-footer .pdv-sidebar,.pdv.dock-footer .pos-panel-toggle,.pdv.dock-footer .pos-panel-reopen{display:none!important}
 
-    @media(max-width:1100px){.pdv.pos-theme-minimum .pdv-title::after{display:none}.pdv.pos-theme-minimum .pos-sale-workspace{grid-template-columns:1fr}}
-    @media(max-width:720px){html[data-scale="large"]{font-size:16px}html[data-scale="large"] .page-title,html[data-scale="large"] .page-title h1{font-size:30px!important}html[data-scale="large"] .btn,html[data-scale="large"] input:not([type="radio"]):not([type="checkbox"]),html[data-scale="large"] select{min-height:50px;font-size:15px!important}html[data-scale="large"] .data-table td{height:58px;font-size:14px!important}html[data-scale="large"] .pos-touch-shortcuts button{min-height:76px}.pdv.pos-theme-minimum .pdv-search{padding-block:10px}.pdv.pos-theme-minimum .pdv-search .search-field input{height:56px}.pdv.pos-theme-minimum .pos-touch-shortcuts{gap:6px;padding:7px}.pdv.pos-theme-minimum .pos-touch-shortcuts button{min-height:72px}}
+        @media(max-width:720px){html[data-scale="large"]{font-size:16px}html[data-scale="large"] .page-title,html[data-scale="large"] .page-title h1{font-size:30px!important}html[data-scale="large"] .btn,html[data-scale="large"] input:not([type="radio"]):not([type="checkbox"]),html[data-scale="large"] select{min-height:50px;font-size:15px!important}html[data-scale="large"] .data-table td{height:58px;font-size:14px!important}.pdv.pos-theme-minimum .pdv-search{padding-block:10px}.pdv.pos-theme-minimum .pdv-search .search-field input{height:56px}}
   `;
   document.head.append(clientStyles);
 
@@ -200,39 +179,12 @@
     layer.classList.toggle('pdv-context-layer', isPdvPanel);
   }
 
-  function syncCollapsedWidgets() {
-    document.querySelectorAll('.pdv-sidebar [data-pos-widget]').forEach(button => {
-      const label = button.querySelector('[data-pos-widget-label]')?.textContent?.trim();
-      if (label) button.title = label;
-    });
-  }
 
-  function syncFooterDockState() {
-    const pdv = document.querySelector('.pdv.dock-footer.sidebar-collapsed');
-    const toggle = pdv?.querySelector('[data-action="toggle-pos-panel"]');
-    if (!pdv || !toggle || pdv.dataset.footerDockReset === 'pending') return;
-    pdv.dataset.footerDockReset = 'pending';
-    queueMicrotask(() => {
-      if (pdv.isConnected && pdv.matches('.dock-footer.sidebar-collapsed')) toggle.click();
-    });
-  }
 
   function currentClientName() {
-    const label = document.querySelector('.pdv [data-pos-widget="client"] [data-pos-widget-label]')?.textContent?.trim();
-    return label && label !== 'Cliente' ? label : '';
+    return document.querySelector('.pdv')?.dataset.posClientName || '';
   }
 
-  function ensureClientStrip() {
-    const pdv = document.querySelector('.pdv');
-    const search = pdv?.querySelector('.pdv-search');
-    if (!pdv || !search || pdv.querySelector('.pos-client-strip')) return;
-    const name = currentClientName();
-    const strip = document.createElement('section');
-    strip.className = `pos-client-strip${name ? ' selected' : ''}`;
-    strip.setAttribute('aria-label', 'Cliente de la venta');
-    strip.innerHTML = `<span class="pos-client-strip-icon">${clientIcon}</span><div class="pos-client-strip-copy"><small>CLIENTE DE LA VENTA</small><strong>${name || 'Consumidor final'}</strong><span>${name ? 'Cliente seleccionado' : 'Busque o registre un cliente sin salir del PDV'}</span></div>${name ? '<button class="btn small" type="button" data-pdv-client-clear>Consumidor final</button>' : ''}<button class="btn secondary" type="button" data-pdv-client-search>${name ? 'Cambiar' : 'Buscar cliente'}</button><button class="btn primary" type="button" data-pdv-client-new>Nuevo cliente</button>`;
-    search.insertAdjacentElement('afterend', strip);
-  }
 
   function filterClientRows(value = '') {
     const term = clientSearchKey(value);
@@ -411,11 +363,9 @@
     enhanceLogin();
     ensureMinimumOptions();
     clarifySaleReceiptSetting();
-    syncFooterDockState();
   }
 
   function syncClientFlow() {
-    ensureClientStrip();
     enhanceClientPicker();
   }
 
@@ -454,8 +404,7 @@
   }, true);
 
   if (layer) new MutationObserver(() => { syncPdvPanel(); syncExperience(); }).observe(layer, {attributes: true, childList: true, subtree: true, attributeFilter: ['hidden']});
-  if (app) new MutationObserver(() => { syncCollapsedWidgets(); syncExperience(); }).observe(app, {childList: true, subtree: true});
+  if (app) new MutationObserver(() => syncExperience()).observe(app, {childList: true, subtree: true});
   syncPdvPanel();
-  syncCollapsedWidgets();
   syncExperience();
 })();
