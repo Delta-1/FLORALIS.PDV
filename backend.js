@@ -37,6 +37,8 @@
   }
 
   async function login(email, password) {
+    const identifier = String(email || '').trim().toLowerCase();
+    email = config.loginAliases?.[identifier] || identifier;
     if (config.mode !== 'supabase') {
       const account = (config.demoUsers || []).find(user => user.email.toLowerCase() === email.toLowerCase() && user.password === password);
       if (!account) throw new Error('Correo o contraseña incorrectos');
@@ -93,6 +95,30 @@
   const isRemote = () => config.mode === 'supabase' && Boolean(config.supabaseUrl && config.supabasePublishableKey);
   const scoped = table => `/rest/v1/${table}?business_id=eq.${businessId}`;
 
+  function mapSale(row, items = []) { return ({ status: row.status || 'completed', cancellationReason: row.cancellation_reason || '', replacementSaleId: row.replacement_sale_id || null, id: row.sale_number, uuid: row.id, clientSaleId: row.client_sale_id || row.id, clientId: row.client_id || null, date: row.created_at, client: row.client_name || 'Consumidor final', employee: row.seller_name || '', employeeId: row.seller_id, items: items.reduce((n, x) => n + Number(x.quantity), 0), subtotal: Number(row.subtotal), discountTotal: Number(row.discount), total: Number(row.total), currency: items[0]?.currency_code === 'BRL' ? 'BRL' : 'BOB', paymentCurrency: row.payment_currency_code || row.currency_code || 'BOB', paymentAmount: Number(row.payment_amount ?? row.display_total ?? 0), received: Number(row.received_amount ?? row.display_total ?? 0), change: Number(row.change_amount || 0), displayTotal: Number(row.payment_amount ?? row.display_total ?? 0), amountBob: Number(row.amount_bob || 0), amountBrl: Number(row.amount_brl || 0), payment: row.payment_method, type: row.kind || 'Venta', notes: row.notes || '', receiptItems: items.map(item => ({ id: item.product_id, productId: item.product_id, code: item.product_code || '', name: item.product_name, qty: Number(item.quantity), quantity: Number(item.quantity), price: Number(item.unit_price), unitPrice: Number(item.unit_price), discount: Number(item.discount || 0), total: Number(item.total), currency: item.currency_code === 'BRL' ? 'BRL' : 'BOB', unitCostBob: Number(item.unit_cost_bob || 0), unitCostBrl: Number(item.unit_cost_brl || 0) })), syncStatus: 'synced' }); }
+  function mapCashMovement(row) { return ({ id: row.id, date: row.created_at, type: row.kind, description: row.description, amount: Number(row.amount), employee: row.employee_name || '', currency: row.currency_code || 'BOB', displayAmount: Number(row.amount), amountBob: Number(row.amount_bob || 0), amountBrl: Number(row.amount_brl || 0), cashSessionId: row.cash_session_id || null, terminalId: row.terminal_id || '' }); }
+
+  async function loadDayActivity(day) {
+    if (!isRemote()) return null;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) throw new Error('Fecha inválida');
+    // The shop operates in Cobija (UTC-4), independently of the device timezone.
+    const start = new Date(`${day}T00:00:00-04:00`);
+    if (!Number.isFinite(start.getTime()) || start.toISOString().slice(0, 10) !== day) throw new Error('Fecha inválida');
+    const end = new Date(start.getTime() + 86400000);
+    const range = `&created_at=gte.${encodeURIComponent(start.toISOString())}&created_at=lt.${encodeURIComponent(end.toISOString())}`;
+    async function allRows(table, select) {
+      const rows = [];
+      // Stable pagination avoids silently dropping transactions on busy days.
+      for (let offset = 0; ; offset += 250) {
+        const page = await request(`${scoped(table)}&select=${select}${range}&order=created_at.desc,id.desc&limit=250&offset=${offset}`);
+        rows.push(...(page || []));
+        if (!page || page.length < 250) return rows;
+      }
+    }
+    const [sales, cash] = await Promise.all([allRows('sales', '*,sale_items(*)'), allRows('cash_movements', '*')]);
+    return { sales: sales.map(row => mapSale(row, row.sale_items || [])), cash: cash.map(mapCashMovement) };
+  }
+
   async function loadWorkspace(terminalId = '') {
     if (!isRemote()) return null;
     await refresh();
@@ -122,8 +148,8 @@
       products: products.map(row => ({ ...fromSnake(row), id: row.id, image: row.image_url || '', minStock: Number(row.min_stock), priceBob: Number(row.price_bob ?? row.price), priceBrl: Number(row.price_brl || 0), wholesaleBob: Number(row.wholesale_bob ?? row.wholesale_price), wholesaleBrl: Number(row.wholesale_brl || 0), costBob: Number(row.cost_bob ?? row.cost), costBrl: Number(row.cost_brl || 0), wholesale: Number(row.wholesale_bob ?? row.wholesale_price), price: Number(row.price_bob ?? row.price), cost: Number(row.cost_bob ?? row.cost), stock: Number(row.stock) })),
       clients: clients.map(row => ({ ...fromSnake(row), id: row.id, photo: row.avatar_url || '', balanceBob: Number(row.balance_bob ?? row.balance), balanceBrl: Number(row.balance_brl || 0), balance: Number(row.balance_bob ?? row.balance), purchases: Number(row.purchases), totalBob: Number(row.total_purchased_bob ?? row.total_purchased), totalBrl: Number(row.total_purchased_brl || 0), total: Number(row.total_purchased_bob ?? row.total_purchased), ledger: (ledgerByClient[row.id] || []).map(entry => ({ id: entry.id, date: entry.effective_at || entry.created_at, type: entry.kind, description: entry.description, amount: Number(entry.amount), currency: entry.currency_code || 'BOB', amountBob: Number(entry.amount_bob || 0), amountBrl: Number(entry.amount_brl || 0), paymentMethod: entry.payment_method || '', reference: entry.reference || '', saleId: entry.sale_id || null })) })),
       employees: memberships.map(row => ({ id: row.user_id, name: row.display_name, role: row.job_title || (row.role === 'admin' ? 'Administrador' : 'Funcionario'), email: row.email || '', phone: row.phone || '', document: row.document || '', admin: row.role === 'admin', supervisor: row.supervisor, permissions: row.permissions || {}, mustChangePassword: Boolean(row.must_change_password), active: row.active !== false, sales: Number(row.sales_count || 0), total: Number(row.sales_total || 0), ticket: Number(row.average_ticket || 0), goal: Number(row.goal_progress || 0), photo: row.avatar_url || '' })),
-      sales: sales.map(row => ({ status: row.status || 'completed', cancellationReason: row.cancellation_reason || '', replacementSaleId: row.replacement_sale_id || null, id: row.sale_number, uuid: row.id, clientSaleId: row.client_sale_id || row.id, clientId: row.client_id || null, date: row.created_at, client: row.client_name || 'Consumidor final', employee: row.seller_name || '', employeeId: row.seller_id, items: (itemsBySale[row.id] || []).reduce((n, x) => n + Number(x.quantity), 0), subtotal: Number(row.subtotal), discountTotal: Number(row.discount), total: Number(row.total), currency: (itemsBySale[row.id] || [])[0]?.currency_code === 'BRL' ? 'BRL' : 'BOB', paymentCurrency: row.payment_currency_code || row.currency_code || 'BOB', paymentAmount: Number(row.payment_amount ?? row.display_total ?? 0), received: Number(row.received_amount ?? row.display_total ?? 0), change: Number(row.change_amount || 0), displayTotal: Number(row.payment_amount ?? row.display_total ?? 0), amountBob: Number(row.amount_bob || 0), amountBrl: Number(row.amount_brl || 0), payment: row.payment_method, type: row.kind || 'Venta', notes: row.notes || '', receiptItems: (itemsBySale[row.id] || []).map(item => ({ id: item.product_id, productId: item.product_id, code: item.product_code || '', name: item.product_name, qty: Number(item.quantity), quantity: Number(item.quantity), price: Number(item.unit_price), unitPrice: Number(item.unit_price), discount: Number(item.discount || 0), total: Number(item.total), currency: item.currency_code === 'BRL' ? 'BRL' : 'BOB', unitCostBob: Number(item.unit_cost_bob || 0), unitCostBrl: Number(item.unit_cost_brl || 0) })), syncStatus: 'synced' })),
-      cash: cash.map(row => ({ id: row.id, date: row.created_at, type: row.kind, description: row.description, amount: Number(row.amount), employee: row.employee_name || '', currency: row.currency_code || 'BOB', displayAmount: Number(row.amount), amountBob: Number(row.amount_bob || 0), amountBrl: Number(row.amount_brl || 0), cashSessionId: row.cash_session_id || null, terminalId: row.terminal_id || '' })),
+      sales: sales.map(row => mapSale(row, itemsBySale[row.id] || [])),
+      cash: cash.map(mapCashMovement),
       cashSession: (cashSessions || []).find(row => row.status === 'open' && (!terminalId || row.terminal_id === terminalId)) ? fromSnake((cashSessions || []).find(row => row.status === 'open' && (!terminalId || row.terminal_id === terminalId))) : null,
       closings: (cashClosings || []).map(row => ({ id: row.id, date: row.closed_at, openedAt: row.opened_at, openingBob: Number(row.opening_bob || 0), openingBrl: Number(row.opening_brl || 0), entriesBob: Number(row.entries_bob || 0), entriesBrl: Number(row.entries_brl || 0), exitsBob: Number(row.exits_bob || 0), exitsBrl: Number(row.exits_brl || 0), totalBob: Number(row.expected_bob || 0), totalBrl: Number(row.expected_brl || 0), reason: row.reason, employee: row.closed_by_name || '', terminalId: row.terminal_id || '', cashSessionId: row.cash_session_id, breakdown: Array.isArray(row.breakdown) ? row.breakdown : null })),
       generatedDocuments: (generatedDocuments || []).map(row => ({ id: row.id, clientDocumentId: row.client_document_id, documentNumber: row.document_number, documentType: row.document_type, title: row.title, sourceType: row.source_type, sourceId: row.source_id, periodStart: row.period_start, periodEnd: row.period_end, createdAt: row.created_at, createdBy: row.created_by, snapshot: row.snapshot || {}, syncStatus: 'synced' })),
@@ -189,5 +215,5 @@
   }
   async function loadDevices() { if (!isRemote() || session?.role !== 'admin') return []; const rows = await request(`${scoped('connected_devices')}&select=*&order=last_seen.desc`); return (rows || []).map(fromSnake); }
 
-  window.FloralisBackend = { login, logout, restoreSession, loadWorkspace, saveProduct, saveClient, saveBusiness, saveSettings, updateCredentials, manageEmployee, resetEmployeePassword, recordLedger, registerSale, changeSale, saveGeneratedDocument, ensureTrainingProduct, addCashMovement, registerClientPayment, openCashSession, closeCashSession, recordAudit, loadAuditLogs, registerDevice, loadDevices, isRemote, getSession: () => session, getBusinessId: () => businessId };
+  window.FloralisBackend = { login, logout, restoreSession, loadWorkspace, loadDayActivity, saveProduct, saveClient, saveBusiness, saveSettings, updateCredentials, manageEmployee, resetEmployeePassword, recordLedger, registerSale, changeSale, saveGeneratedDocument, ensureTrainingProduct, addCashMovement, registerClientPayment, openCashSession, closeCashSession, recordAudit, loadAuditLogs, registerDevice, loadDevices, isRemote, getSession: () => session, getBusinessId: () => businessId };
 })();
