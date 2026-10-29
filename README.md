@@ -2,13 +2,16 @@
 
 Sistema unificado de vendas e gestão para floriculturas, lojas de buquês e presentes. A mesma base funciona na web, como PWA instalável, aplicativo Windows e aplicativo Android.
 
-O sistema aceita bolivianos (`BOB` / `Bs`), reais (`BRL` / `R$`) e dólares (`USD` / `$`). O operador troca a moeda diretamente no cabeçalho do PDV; as cotações são configuradas pelo administrador e cada venda preserva a moeda e a taxa utilizadas.
+O PDV utiliza preços próprios em bolivianos (`BOB` / `Bs`) e reais (`BRL` / `R$`). O operador escolhe a moeda no cabeçalho e recebe nessa mesma moeda, sem conversão automática. Vendas, caixa e relatórios preservam os valores separados.
 
 ## Funcionalidades disponíveis
 
 - histórico de vendas como tela inicial, com pedidos e orçamentos;
 - catálogo preparado para flores, buquês, arranjos, presentes e artigos complementares;
-- troca de moeda no PDV entre BOB, BRL e USD, com conversão instantânea e câmbio configurável;
+- troca entre BOB e BRL no PDV, com preços independentes por moeda;
+- aba Movimento do dia dentro do PDV, com calendário de Cobija, busca, totais separados, recibos e acesso direto à edição/cancelamento por administrador;
+- consulta paginada do dia ao servidor, incluindo entradas e saídas e preservando o carrinho em andamento;
+- pagamento em dinheiro com valor recebido e troco destacados na tela e no cupom;
 - login separado para administrador e funcionário, permissões e sessão persistente;
 - PDV em tela cheia com pesquisa, leitura por código, carrinho, preço varejista/atacadista, abertura dedicada por `F3` e orçamento por `F7`;
 - atalhos grandes e clicáveis, com alternativas próprias para notebook (`Alt+B` para buscar, `Alt+C` para cliente e `Ctrl+Enter` para finalizar), sem depender da tecla `Fn`;
@@ -29,7 +32,7 @@ O sistema aceita bolivianos (`BOB` / `Bs`), reais (`BRL` / `R$`) e dólares (`US
 - modo claro, escuro ou automático, cinco paletas e escala proporcional Pequena/Média/Grande (Média preserva o visual original);
 - tipografia operacional grande em Arial, caixa alta e números tabulares alinhados no ERP, PDV, recibos e relatórios;
 - escala do documento em cinco níveis (85% a 155%) no editor de documentos, aumentando texto e altura das linhas também nos modelos oficiais A4;
-- ao concluir uma venda real, o operador escolhe e visualiza um dos dois recibos oficiais A4 tabulares; o modelo padrão é configurável e o cupom térmico fica restrito a simulações;
+- ao concluir ou consultar uma venda, prévia e impressão do cupom térmico de 80 mm com troco, além de acesso aos recibos e relatórios A4;
 - importação universal de produtos e clientes com prévia, mapeamento de colunas, modelos CSV e suporte a CSV, TSV, XLS e XLSX;
 - logs de auditoria com usuário, horário, módulo, terminal/dispositivo e console de eventos somente leitura;
 - exportação CSV de produtos, clientes e funcionários;
@@ -105,7 +108,7 @@ O sistema continua operacional sem um projeto Supabase. Quando houver um projeto
 
 O resumo de caixa e o recibo usam os dados já registrados no ERP e podem ser impressos ou salvos em PDF. A factura de Zona Franca é um modelo comercial: código de autorização e QR fiscal só devem ser emitidos por uma integração homologada com o SIN.
 
-Pendências antes de uma operação comercial real: homologar a emissão fiscal com o SIN na Bolívia, cancelamentos/devoluções, fila de vendas offline e backups monitorados.
+Pendências antes de uma operação comercial real: homologar a emissão fiscal com o SIN na Bolívia, devoluções parciais, acompanhamento da fila de vendas offline e backups monitorados.
 
 ## Aviso
 

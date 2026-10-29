@@ -205,7 +205,7 @@ test('cash movement method rule matches sales and debt payments', () => {
 });
 
 test('review fixes: sale currency hydration, OTRO collision, stock alerts, history, filters', () => {
-  assert.match(backend, /currency: \(itemsBySale\[row\.id\] \|\| \[\]\)\[0\]\?\.currency_code === 'BRL'/);
+  assert.match(backend, /currency: items\[0\]\?\.currency_code === 'BRL'/);
   assert.match(read('supabase/migrations/20261011130000_open_price_products.sql'), /on conflict \(business_id,code\) do nothing/);
   assert.match(app, /ui\.productFilter==='Stock bajo'&&productTracksStock\(p\)/);
   assert.match(app, /<th>Total venta<\/th>/);

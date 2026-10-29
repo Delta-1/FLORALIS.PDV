@@ -847,3 +847,96 @@ html[data-palette="floralis"] .login-visual .eyebrow{color:#ead7ef}
 .reference-payment-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #111;margin:10px 0;break-inside:avoid;color:#111}.reference-payment-summary>div{padding:8px;border-right:1px solid #111;display:grid;gap:4px}.reference-payment-summary>div:last-child{border-right:0;background:#eee}.reference-payment-summary span{font-size:10px}.reference-payment-summary strong{font-size:14px;font-variant-numeric:tabular-nums}
 @media(max-width:480px){.received-input-row{flex-wrap:wrap}.received-input-row .btn{width:100%}.payment-change strong{font-size:27px}}
 @media print{.receipt-summary>.receipt-change{color:#111!important}.reference-payment-summary{color:#111!important;border-color:#111!important}}
+
+/* Daily control stays beside the sale; the contributor's compact menu and cart remain. */
+.pdv.pdv-simple .pos-main-tabs{flex:none;display:flex;align-items:stretch;gap:8px;padding:8px 20px 12px;border-bottom:1px solid var(--line);background:var(--surface)}
+.pos-main-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 18px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--muted);font:600 16px Arial,Helvetica,sans-serif;cursor:pointer}
+.pos-main-tabs button.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.pos-main-tabs button small{font-size:12px;font-weight:400}
+.pos-main-tabs button.pos-header-cash{margin-left:auto;border-color:var(--line);color:var(--text)}
+.pos-main-tabs svg{width:20px;height:20px;flex:none}
+.pdv-simple .pos-selling-region{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.pdv.pdv-simple .pos-selling-region[hidden]{display:none!important}
+.pdv.pdv-simple .pdv-title{min-height:68px;padding:12px 20px}
+.pdv.pdv-simple .pdv-title h1{font-size:24px!important}
+.pdv.pdv-simple .pdv-search{height:auto;padding-block:10px}
+.pdv.pdv-simple .pdv-search .search-field input{min-height:50px;height:50px;font-size:18px!important}
+.pdv.pdv-simple .quantity-field input{min-height:50px;height:50px}
+.pdv.pdv-simple .pos-product-name{font-size:16px!important;line-height:1.25}
+.pdv.pdv-simple .pos-product-card>strong{font-size:22px!important}
+.pdv.pdv-simple .pos-line-main strong{font-size:17px!important;line-height:1.3}
+.pdv.pdv-simple .pos-line-total{font-size:19px!important}
+.pdv.pdv-simple .pos-cart-foot .pdv-total strong{font-size:36px!important}
+.pdv.pdv-simple .pos-checkout{min-height:54px;font-size:20px!important}
+.pos-day-panel{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:24px;display:flex;flex-direction:column;gap:18px;background:var(--surface-2)}
+.pos-day-heading{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.pos-day-heading h2{margin:5px 0 7px;font-size:28px;line-height:1.15;color:var(--text)}
+.pos-day-heading p{margin:0;font-size:15px;color:var(--muted)}
+.pos-day-heading .eyebrow{font-size:11px;letter-spacing:.08em;color:var(--accent)}
+.pos-day-date{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
+.pos-day-date label{display:grid;gap:5px;font-size:12px;color:var(--muted)}
+.pos-day-date input{min-height:46px;max-width:180px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--text);font:16px Arial,Helvetica,sans-serif}
+.pos-day-panel .btn{min-height:44px;font-size:15px!important;white-space:normal}
+.pos-day-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.pos-day-metrics article{display:grid;gap:9px;padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--surface);min-width:0}
+.pos-day-metrics span{font-size:14px;font-weight:600;color:var(--muted)}
+.pos-day-metrics strong{font-size:30px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;color:var(--text)}
+.pos-day-metrics small{font-size:12px;color:var(--muted);line-height:1.4}
+.pos-day-cash-summary{display:flex;flex-wrap:wrap;gap:12px 26px;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.pos-day-cash-summary span{display:grid;gap:5px;font-size:12px;color:var(--muted)}
+.pos-day-cash-summary b{font-size:15px;font-variant-numeric:tabular-nums;color:var(--text)}
+.pos-day-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pos-day-switch{display:flex;padding:4px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.pos-day-switch button{min-height:42px;padding:8px 14px;border:0;border-radius:7px;background:transparent;color:var(--muted);font:600 14px Arial,Helvetica,sans-serif;cursor:pointer}
+.pos-day-switch button.active{background:var(--accent);color:#fff}
+.pos-day-search{flex:1;min-width:180px;display:flex;align-items:center;gap:10px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--muted)}
+.pos-day-search svg{width:19px;height:19px;flex:none}
+.pos-day-search input{width:100%;min-width:0;height:48px!important;min-height:48px!important;border:0!important;background:transparent!important;box-shadow:none!important;font:16px Arial,Helvetica,sans-serif;color:var(--text)}
+.pos-day-toolbar select{min-height:48px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--text);font-size:15px}
+.pos-day-list{display:grid;gap:10px}
+.pos-activity-row{display:grid;grid-template-columns:42px minmax(180px,1fr) auto auto;align-items:center;gap:16px;padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--surface);min-width:0}
+.pos-activity-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--accent-soft);color:var(--accent)}
+.pos-activity-icon svg{width:22px;height:22px}
+.pos-activity-icon.out{background:var(--surface-2);color:var(--muted)}
+.pos-activity-copy{display:grid;gap:6px;min-width:0}
+.pos-activity-copy>div{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.pos-activity-copy strong{font-size:17px;overflow-wrap:anywhere}
+.pos-activity-copy b{font-size:16px;font-weight:500;overflow-wrap:anywhere}
+.pos-activity-copy time,.pos-activity-copy small{font-size:13px;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}
+.pos-activity-amount{font-size:22px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pos-activity-amount small{display:block;margin-top:6px;font-size:12px;font-weight:400;color:var(--muted)}
+.pos-activity-actions{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end;max-width:380px}
+.pos-activity-actions .btn{padding:8px 12px;font-size:14px!important}
+.pos-activity-row.cancelled{border-style:dashed}
+.pos-activity-row.cancelled .pos-activity-amount{text-decoration:line-through;color:var(--muted)}
+.pos-day-empty{display:grid;justify-items:center;gap:10px;padding:45px 15px;text-align:center;color:var(--muted)}
+.pos-day-empty svg{width:36px;height:36px;color:var(--accent)}
+.pos-day-empty strong{font-size:18px;color:var(--text)}
+.pos-day-empty span{font-size:14px}
+.pos-day-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:6px}
+.pos-day-foot>span{font-size:12px;color:var(--muted)}
+.receipt-paid-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:18px;padding:12px;border:1px solid var(--accent);border-radius:12px;background:var(--accent-soft);color:var(--text)}
+.receipt-paid-summary>div{display:grid;gap:6px;min-width:0}
+.receipt-paid-summary span{font-size:12px}
+.receipt-paid-summary strong{font-size:21px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.receipt-paid-summary>div:last-child{color:var(--accent)}
+.pos-day-panel button:focus-visible,.pos-main-tabs button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@media(max-width:1200px){.pos-activity-row{grid-template-columns:42px minmax(0,1fr) auto}.pos-activity-actions{grid-column:2/-1;max-width:none}.pos-day-heading{align-items:flex-start;flex-wrap:wrap}}
+@media(max-width:720px){
+ .pdv.pdv-simple .pdv-title{min-height:58px;padding:8px 12px}.pdv.pdv-simple .pdv-title h1{font-size:21px!important}
+ .pdv.pdv-simple .pos-main-tabs{padding:6px 10px 9px;gap:6px}.pos-main-tabs button{flex:1;min-height:46px;padding:8px;font-size:14px;gap:6px}.pos-main-tabs button.pos-header-cash{display:none}.pos-main-tabs button small{display:none}
+ .pdv.pdv-simple .pdv-search{margin:0;padding:8px 10px;grid-template-columns:minmax(0,1fr) 68px}.pdv.pdv-simple .pdv-search .search-field input{font-size:16px!important}
+ .pos-day-panel{padding:14px 10px;gap:14px}.pos-day-heading{gap:14px}.pos-day-heading h2{font-size:24px}.pos-day-heading p{font-size:13px}
+ .pos-day-date{width:100%;gap:6px}.pos-day-date label{flex:1;min-width:135px}.pos-day-date input{width:100%;max-width:none}.pos-day-date .btn{padding:8px 10px;font-size:13px!important}
+ .pos-day-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pos-day-metrics article{padding:13px;gap:7px}.pos-day-metrics strong{font-size:24px}.pos-day-metrics article:last-child{grid-column:1/-1;grid-template-columns:1fr auto;align-items:center}.pos-day-metrics article:last-child small{grid-column:1/-1}.pos-day-metrics span{font-size:12px}
+ .pos-day-cash-summary{padding:12px;gap:14px}.pos-day-cash-summary span{flex:1;min-width:125px}.pos-day-cash-summary b{font-size:14px}
+ .pos-day-toolbar{gap:8px}.pos-day-switch{width:100%}.pos-day-switch button{flex:1;font-size:13px;padding-inline:6px}.pos-day-search{min-width:160px}
+ .pos-activity-row{padding:12px;gap:10px;grid-template-columns:minmax(0,1fr) auto}.pos-activity-icon{display:none}.pos-activity-copy strong{font-size:16px}.pos-activity-copy b{font-size:15px}.pos-activity-amount{font-size:19px}.pos-activity-actions{grid-column:1/-1;justify-content:flex-start}.pos-activity-actions .btn{flex:1;padding:8px;font-size:13px!important}
+ .pos-day-foot{flex-wrap:wrap}.pos-day-foot .btn{width:100%}.receipt-paid-summary strong{font-size:18px}
+}
+@media print{.receipt-paid-summary,.pos-main-tabs{display:none!important}}
+
+/* Keep the selling surface clear and the daily actions in a consistent two-column group. */
+.pdv.pdv-simple::before{display:none}
+@media(min-width:1201px){.pos-activity-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:240px}.pos-activity-actions .btn{width:100%}}
+@media(max-width:420px){.pos-activity-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}}
